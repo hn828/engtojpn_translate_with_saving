@@ -7,14 +7,14 @@ let commonWords = [];
 
 //辞書読み込み
 Promise.all([
-  fetch("./ejdict_connected_idioms_lower_ver16.json").then(r => r.json()),
-  fetch("./ejdict_kaisetunaiidiom.json").then(r => r.json()),
-  fetch("./commonwords.json").then(r => r.json())
+  fetch("./ejdict_connected_idioms_lower_ver16.json",{cache:"force-cache"}).then(r => r.json()),
+  fetch("./ejdict_kaisetunaiidiom.json",{cache:"force-cache"}).then(r => r.json()),
+  fetch("./commonwords.json",{cache:"force-cache"}).then(r => r.json())
 ]).then(([dict1, dict2, dict3]) => {
   dictionary=dict1;
   dictionary2=dict2;
   commonWords=dict3
-  //console.log("辞書読み込み完了");
+  console.log("辞書読み込み完了");
 });
 
 const searchInput = document.getElementById("inputText");
