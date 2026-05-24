@@ -642,7 +642,9 @@ function doAutoSave(){
     const phrase=e.dataset.phrase
     const short=e.dataset.short
     const full=e.dataset.full
-    save(phrase,short,full)
+    if(full !== "訳が見つかりません"){
+      save(phrase,short,full)
+    }
     console.log("function doAutoSave_1"+phrase,short,full)
     console.log("function doAutoSave_2"+e)
   }
