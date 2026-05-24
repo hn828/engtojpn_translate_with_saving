@@ -516,7 +516,7 @@ document.addEventListener("click",()=>{
 let resultArray=[];
 searchInput.addEventListener("input", () => {
     if (!dictionary || !dictionary2) {
-      //console.log("辞書がまだロードされていません");
+      console.log("辞書がまだロードされていません");
       return;
     }
     let words = searchInput.value 
@@ -612,7 +612,7 @@ searchInput.addEventListener("keydown", (e) => {
 
 //以下保存機能追加用
 let savedWords=[];
-const translationContainer = document.getElementById("translationContainer");
+//const translationContainer = document.getElementById("translationContainer");
 const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
 exportBtn.addEventListener("click", exportToExcel);
