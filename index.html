@@ -2,7 +2,7 @@
 <html lang = "ja">
     <head>
         <meta charset="UTF-8">
-        <title>翻訳aaa</title>
+        <title>翻訳bbb</title>
         <style>
             body{
                 background-color:rgb(240, 240, 240);
@@ -72,9 +72,12 @@
         <input id="inputText" type="text" placeholder = "検索ワードを入力">
         <div id="translationText"></div>
         <div id="translationHistory"></div>
-        <div>保存した単語</div>
-        <div id="savedWords"></div>
-        <button id="exportBtn">Excelに保存</button>        
+        
+        <div id="savedWords">
+            <div>保存した単語</div>
+            <button id="exportBtn">Excelに保存</button>
+        </div>
+                
         <script src="xlsx.full.min.js"></script>
         <script src="script_saving_distribute.js"></script>
     </body>
