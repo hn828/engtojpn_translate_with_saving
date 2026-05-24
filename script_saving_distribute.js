@@ -607,7 +607,12 @@ searchInput.addEventListener("keydown", (e) => {
     "afterbegin",`<div class=history-block>${translationText.innerHTML}</div>`
   )
   searchInput.value = ""
+  if(autoSave===true){
+    doAutoSave()
+    console.log("searchInput.addEventListener_1")
+  }
   translationText.innerHTML=""
+
 })
 
 //以下保存機能追加用
@@ -631,6 +636,19 @@ function save(phrase,short,full){
   renderSavedWords()
 }
 
+function doAutoSave(){
+  const saveBtns = translationText.querySelectorAll(".saveBtn")
+  for(const e of saveBtns){
+    const phrase=e.dataset.phrase
+    const short=e.dataset.short
+    const full=e.dataset.full
+    save(phrase,short,full)
+    console.log("function doAutoSave_1"+phrase,short,full)
+    console.log("function doAutoSave_2"+e)
+  }
+  console.log("function doAutoSave_3_saveBtns="+saveBtns)
+  console.log("function doAutoSave_4_saveBtns="+saveBtns.length)
+}
 
 //削除
 function remove(phrase){
