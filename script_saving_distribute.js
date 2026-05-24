@@ -600,6 +600,11 @@ searchInput.addEventListener("input", () => {
 
 //検索欄_Enter
 searchInput.addEventListener("keydown", (e) => {
+  console.log(e.shiftKey, e.key)
+  if(e.shiftKey && e.key === "Enter"){
+    autoSaveMode()
+    console.log("searchInput.addEventListener_Shift+Enter")
+  }
   if(e.key!=="Enter") return;
   e.preventDefault();//Enter押しても改行しないようにする
   if(searchInput.value.trim()==="")return;//入力欄に何もなければ何もしない
@@ -607,6 +612,7 @@ searchInput.addEventListener("keydown", (e) => {
     "afterbegin",`<div class=history-block>${translationText.innerHTML}</div>`
   )
   searchInput.value = ""
+
   if(autoSave===true){
     doAutoSave()
     console.log("searchInput.addEventListener_1")
@@ -614,6 +620,7 @@ searchInput.addEventListener("keydown", (e) => {
   translationText.innerHTML=""
 
 })
+
 
 //以下保存機能追加用
 let savedWords=[];
