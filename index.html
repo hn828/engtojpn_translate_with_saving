@@ -65,6 +65,18 @@
             border-top:1px solid #ccc;
             padding:8px;
             }
+            #btnTable{
+            width: 100%;        /* 親幅いっぱいまで広げる */
+            display: block;     /* margin: auto を効かせるために必要 */
+            }
+            .btn{
+            }
+            .autoSaveOn{
+            background-color:rgb(196, 195, 195);
+            border-width:1.6px ;
+            border-style:inset;
+            border-color: rgba(195, 195, 195, 0.2);
+            }
         </style>
     </head>
     <body>
@@ -73,7 +85,13 @@
         <div id="translationHistory"></div>
         <div id="savedWordsContainer">
             <div id="savedWords"></div>
-            <button id="exportBtn">Excelに保存</button>
+            <table id="btnTable">
+                <tr id="btnTable">
+                    <th><button id="autoSaveBtn" class="btn">自動保存モード:off</button></th>
+                    <th></th>
+                    <th><button id="exportBtn" >Excelデータを取得</button></th>
+                </tr>
+            </table>
         </div>        
         <script src="xlsx.full.min.js"></script>
         <script src="script_saving_distribute.js"></script>

@@ -615,7 +615,7 @@ let savedWords=[];
 //const translationContainer = document.getElementById("translationContainer");
 const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
-exportBtn.addEventListener("click", exportToExcel);
+let autoSave=false
 
 //保存機能function
 //保存
@@ -674,6 +674,22 @@ function exportToExcel(){
   XLSX.writeFile(wb,"saved_words.xlsx")
 }
 
+function autoSaveMode(){
+  if (autoSave===false){
+    autoSave=true
+    autoSaveBtn.classList.add("autoSaveOn")
+    autoSaveBtn.innerHTML="自動保存モード：on"
+    console.log(1)
+  }  else if (autoSave===true){
+    autoSave=false
+    autoSaveBtn.classList.remove("autoSaveOn")
+    autoSaveBtn.innerHTML="自動保存モード：off"
+    console.log(2)
+  }
+  console.log(autoSave)
+
+}
+
 //保存機能クリック
 //保存ボタンクリック
 document.body.addEventListener("click", (e) => {
@@ -691,3 +707,9 @@ if(!e.target.classList.contains("removeBtn"))return;
 const phrase=e.target.dataset.phrase
 remove(phrase);
 })
+
+//Excel保存ボタンクリック
+exportBtn.addEventListener("click", exportToExcel);
+
+//自動保存モードクリック
+autoSaveBtn.addEventListener("click",autoSaveMode)
