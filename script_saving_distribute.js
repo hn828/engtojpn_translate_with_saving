@@ -643,6 +643,7 @@ function save(phrase,short,full){
   renderSavedWords()
 }
 
+//自動保存
 function doAutoSave(){
   const saveBtns = translationText.querySelectorAll(".saveBtn")
   for(const e of saveBtns){
@@ -666,6 +667,18 @@ function remove(phrase){
   renderSavedWords()
 }
 
+//全消去
+function allDelete(){
+  const removeBtns = savedWordsContainer.querySelectorAll(".removeBtn")
+  for(const e of removeBtns){
+    const phrase=e.dataset.phrase
+    savedWords=savedWords.filter(item=>item.phrase!==phrase);
+    console.log("function allDelete"+phrase)
+  }
+  localStorage.setItem("savedWords", JSON.stringify(savedWords));
+  renderSavedWords()
+  console.log("function allDelete_1")
+}
 
 //表示
 function renderSavedWords() {
@@ -717,6 +730,8 @@ function autoSaveMode(){
 
 }
 
+
+
 //保存機能クリック
 //保存ボタンクリック
 document.body.addEventListener("click", (e) => {
@@ -740,3 +755,14 @@ exportBtn.addEventListener("click", exportToExcel);
 
 //自動保存モードクリック
 autoSaveBtn.addEventListener("click",autoSaveMode)
+
+//全消去ボタンクリック
+allDeleteBtn.addEventListener("click",function(){
+  const removeBtns = savedWordsContainer.querySelectorAll(".removeBtn")
+  console.log("allDeleteBtn.addEventListener_1,removeBtns.length="+removeBtns.length)
+  if (removeBtns.length!==0){
+    if(window.confirm("保存した単語を全て消去します")){
+      allDelete()
+    }
+  }
+});
