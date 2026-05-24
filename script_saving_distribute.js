@@ -22,6 +22,7 @@ const translationText = document.getElementById("translationText");
 const translationHistory= document.getElementById("translationHistory");
 
 
+
 //function定義　関数
 //かっこの外のみ取り出す(あい(う)えお)かきなどに対応。かきのみ出力
 function replaceNested(str,pre,post) {
@@ -105,8 +106,8 @@ function lookupwords(words, m) {
       
       //let phrase2 = meaning1.replace(/^\s*=\s*/, "");
       let phrase2 = meaning1.replace(/^=([a-zA-Z]+).*/, "$1");//=wonderful / はなはだ,著しくでwonderfulを残す
-      console.log("lookupwords_meaning1=",meaning1)
-      console.log("lookupwords_phrase2=",phrase2)
+      //console.log("lookupwords_meaning1=",meaning1)
+      //console.log("lookupwords_phrase2=",phrase2)
 
       if (visited.has(phrase2)) {
         break;
@@ -117,7 +118,7 @@ function lookupwords(words, m) {
       if (commonWords.includes(phrase2)){
         shortedMeaning1=getveryShortMeaning(meaning1)
       }
-      accumulatedMeaning = accumulatedMeaning+ " / ※" + phrase2 + " " +  shortedMeaning1;
+      accumulatedMeaning = accumulatedMeaning+ "  ※" + phrase2 + "→" +  shortedMeaning1;
       //accumulatedMeaning = shortedMeaning1 + accumulatedMeaning.replace("="+phrase2,"") 
     }
     let key = words.slice(0, 1).join(); //配列から文字列にしている
@@ -583,6 +584,7 @@ searchInput.addEventListener("input", () => {
         <details>
           <summary>
             ${phrase}→${short}
+            <button class="saveBtn" data-index="${index}" data-phrase="${phrase}" data-short="${short}" data-full="${full}">保存</button> 
           </summary>
           <div>${full}</div>
         </details>
@@ -608,4 +610,84 @@ searchInput.addEventListener("keydown", (e) => {
   translationText.innerHTML=""
 })
 
+//以下保存機能追加用
+let savedWords=[];
+const translationContainer = document.getElementById("translationContainer");
+const container = document.getElementById("savedWords");
+const exportBtn = document.getElementById("exportBtn");
+exportBtn.addEventListener("click", exportToExcel);
 
+//保存機能function
+//保存
+function save(phrase,short,full){
+  const exsisting=savedWords.find(item => item.phrase === phrase)
+  if(exsisting){
+    exsisting.count++;
+  }else{
+    const count=1
+    savedWords.push({phrase,short,full,count})
+  }
+  localStorage.setItem("savedWords", JSON.stringify(savedWords));
+  renderSavedWords()
+}
+
+
+//削除
+function remove(phrase){
+  savedWords=savedWords.filter(item=>item.phrase!==phrase);
+  localStorage.setItem("savedWords", JSON.stringify(savedWords));
+  renderSavedWords()
+}
+
+
+//表示
+function renderSavedWords() {
+  //const container = document.getElementById("savedWords");//外に書いた
+  container.innerHTML = savedWords.map(item =>`
+    <div class="word-block">
+      <details>
+        <summary>
+          ${item.phrase}→${item.short}
+          <button class="removeBtn" data-phrase="${item.phrase}">×</button>
+        </summary>
+       <div>${item.full}</div>
+      </details>
+    </div>
+  `).join("");
+}
+
+//Excelファイルに保存
+function exportToExcel(){
+  if (savedWords.length===0){
+    alert("保存された単語がありません")
+    return
+  }
+  const wsData=savedWords.map(item=>({
+    phrase:item.phrase,
+    short:item.short,
+    full:item.full,
+    count:item.count
+  }))
+  const ws=XLSX.utils.json_to_sheet(wsData)
+  const wb=XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(wb,ws,"SavedWords")
+  XLSX.writeFile(wb,"saved_words.xlsx")
+}
+
+//保存機能クリック
+//保存ボタンクリック
+document.body.addEventListener("click", (e) => {
+  if(!e.target.classList.contains("saveBtn"))return;
+  const phrase=e.target.dataset.phrase
+  const short=e.target.dataset.short
+  const full=e.target.dataset.full
+  //console.log(`document.body_phrase=${phrase},short=${short},full=${full}`);
+  save(phrase, short, full)
+})
+
+//×ボタンクリック
+container.addEventListener("click", (e) => {
+if(!e.target.classList.contains("removeBtn"))return;
+const phrase=e.target.dataset.phrase
+remove(phrase);
+})
