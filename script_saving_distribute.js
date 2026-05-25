@@ -598,13 +598,93 @@ searchInput.addEventListener("input", () => {
   }
 );
 
-//検索欄_Enter
+//キーダウン
 searchInput.addEventListener("keydown", (e) => {
-  console.log(e.shiftKey, e.key)
+  console.log(e)
+  //右矢印→
+  if(e.key==="ArrowRight"){
+    //console.log("searchInput.addEventListener_10→")
+    let openInTranslationText=false
+    if (translationText.innerHTML!==""){
+      const details = translationText.querySelectorAll("details");
+      for(const e of [...details].reverse()){
+        if (e.open){
+          continue
+        }else if(!e.open){
+          e.open = true;
+          openInTranslationText=true
+          break
+        }else{
+        }
+      }
+    }
+    if(openInTranslationText===false && translationHistory.innerHTML!==""){
+      const historyBlocks = translationHistory.querySelectorAll(".history-block")
+      let found = false
+      for(const i of [...historyBlocks]){
+        const details = i.querySelectorAll("details");
+        for(const e of [...details].reverse()){
+          if (e.open){
+            continue
+          }else if(!e.open){
+            e.open = true;
+            found = true
+            break
+          }else{
+          }
+        }
+        if (found) break 
+      }
+    }
+  }
+  //上矢印　全閉じ
+  if(e.key==="ArrowUp"){
+    e.preventDefault()
+    if (translationText.innerHTML!==""){
+      const details = translationText.querySelectorAll("details");
+      for(const e of [...details]){
+        e.open = false;
+        }
+      }
+    if(translationHistory.innerHTML!==""){
+      const historyBlocks = translationHistory.querySelectorAll(".history-block")
+      for(const i of [...historyBlocks]){
+        const details = i.querySelectorAll("details");
+        for(const e of [...details]){
+          e.open = false;
+        }
+      }
+    }
+  }    
   if(e.shiftKey && e.key === "Enter"){
     autoSaveMode()
-    console.log("searchInput.addEventListener_Shift+Enter")
+    //console.log("searchInput.addEventListener_Shift+Enter")
   }
+  //下矢印　全開け
+  if(e.key==="ArrowDown"){
+    e.preventDefault
+    if (translationText.innerHTML!==""){
+      const details = translationText.querySelectorAll("details");
+      for(const e of [...details]){
+        e.open = true;
+        }
+      }
+    if(translationHistory.innerHTML!==""){
+      const historyBlocks = translationHistory.querySelectorAll(".history-block")
+      for(const i of [...historyBlocks]){
+        const details = i.querySelectorAll("details");
+        for(const e of [...details]){
+          e.open = true;
+        }
+      }
+    }
+  }
+  //Shift+Enter　自動保存モード    
+  if(e.shiftKey && e.key === "Enter"){
+    autoSaveMode()
+    //console.log("searchInput.addEventListener_Shift+Enter")
+  }
+  //検索欄_Enter
   if(e.key!=="Enter") return;
   e.preventDefault();//Enter押しても改行しないようにする
   if(searchInput.value.trim()==="")return;//入力欄に何もなければ何もしない
@@ -615,7 +695,7 @@ searchInput.addEventListener("keydown", (e) => {
 
   if(autoSave===true){
     doAutoSave()
-    console.log("searchInput.addEventListener_1")
+    //console.log("searchInput.addEventListener_3")
   }
   translationText.innerHTML=""
 
@@ -731,7 +811,7 @@ function autoSaveMode(){
 
 }
 
-
+//画面下部のcontainer
 const savedWordsContainer = document.getElementById("savedWordsContainer");
 const tableContainer = document.getElementById("tableContainer");
 savedWordsContainer.style.marginBottom =
