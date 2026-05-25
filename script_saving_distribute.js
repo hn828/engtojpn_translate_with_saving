@@ -600,8 +600,8 @@ searchInput.addEventListener("input", () => {
 
 //キーダウン
 searchInput.addEventListener("keydown", (e) => {
-  console.log(e)
-  //右矢印→
+  //console.log(e)
+  //右矢印→ 一つずつ詳細を開く
   if(e.key==="ArrowRight"){
     //console.log("searchInput.addEventListener_10→")
     let openInTranslationText=false
@@ -637,6 +637,7 @@ searchInput.addEventListener("keydown", (e) => {
       }
     }
   }
+
   //上矢印　全閉じ
   if(e.key==="ArrowUp"){
     e.preventDefault()
@@ -660,6 +661,7 @@ searchInput.addEventListener("keydown", (e) => {
     autoSaveMode()
     //console.log("searchInput.addEventListener_Shift+Enter")
   }
+
   //下矢印　全開け
   if(e.key==="ArrowDown"){
     e.preventDefault
@@ -679,6 +681,7 @@ searchInput.addEventListener("keydown", (e) => {
       }
     }
   }
+
   //Shift+Enter　自動保存モード    
   if(e.shiftKey && e.key === "Enter"){
     autoSaveMode()
@@ -717,7 +720,8 @@ function save(phrase,short,full){
     exsisting.count++;
   }else{
     const count=1
-    savedWords.push({phrase,short,full,count})
+    savedWords.push({phrase,short,full,count,label})
+    console.log("function save(phrase,short,full){"+label+","+savedWords[0].label)
   }
   localStorage.setItem("savedWords", JSON.stringify(savedWords));
   renderSavedWords()
@@ -787,7 +791,8 @@ function exportToExcel(){
     phrase:item.phrase,
     short:item.short,
     full:item.full,
-    count:item.count
+    count:item.count,
+    label:item.label
   }))
   const ws=XLSX.utils.json_to_sheet(wsData)
   const wb=XLSX.utils.book_new()
@@ -842,10 +847,11 @@ exportBtn.addEventListener("click", exportToExcel);
 autoSaveBtn.addEventListener("click",autoSaveMode)
 
 //ラベル付与
-let tytle = ""
+let label = ""
+console.log("label="+label)
 changeTytleBtn.addEventListener("click",function(){
-  tytle=prompt("名前を入力してください")
-  console.log("changeTytleBtn.addEventListener_1")
+  label=prompt("名前を入力してください")
+  console.log("changeTytleBtn.addEventListener_1_label="+label)
 })
 
 //全消去ボタンクリック
