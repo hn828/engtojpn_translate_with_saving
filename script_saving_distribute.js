@@ -731,6 +731,10 @@ function autoSaveMode(){
 }
 
 
+const savedWordsContainer = document.getElementById("savedWordsContainer");
+const tableContainer = document.getElementById("tableContainer");
+savedWordsContainer.style.marginBottom =
+    tableContainer.offsetHeight + "px";
 
 //保存機能クリック
 //保存ボタンクリック

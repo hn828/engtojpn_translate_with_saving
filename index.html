@@ -64,10 +64,23 @@
             background:rgb(230,230,230);
             border-top:1px solid #ccc;
             padding:8px;
+            padding-bottom: 0px;
+            }
+            #tableContainer{
+            position:fixed;
+            bottom:0;
+            left:0;
+            right:0;
+            max-height:10%;
+            overflow-y:auto;
+            background:rgb(230,230,230);
+            padding:8px;              
             }
             #btnTable{
-            width: 100%;        /* 親幅いっぱいまで広げる */
+            position:absolute
+            width 100%;        /* 親幅いっぱいまで広げる */
             display: block;     /* margin: auto を効かせるために必要 */
+            margin:auto;
             }
             .btn{
             }
@@ -85,15 +98,17 @@
         <div id="translationHistory"></div>
         <div id="savedWordsContainer">
             <div id="savedWords"></div>
+        </div>
+        <div id="tableContainer">
             <table id="btnTable">
-                <tr id="btnTable">
+                <tr>
                     <th><button id="autoSaveBtn" class="btn">自動保存モード：off</button></th>
                     <th><button id="changeTytleBtn" class="btn">ラベル付与</button></th>                    
                     <th><button id="allDeleteBtn" >全消去</button></th>
                     <th><button id="exportBtn" >Excelデータを取得</button></th>
                 </tr>
-            </table>
-        </div>        
+            </table>  
+        </div>              
         <script src="xlsx.full.min.js"></script>
         <script src="script_saving_distribute.js"></script>
     </body>
