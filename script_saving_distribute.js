@@ -864,13 +864,13 @@ function changeLabelNameDisplay(newname){//ボタンに表示する用の文字�
 
 changeLabelBtn.addEventListener("click",function(){
   label=prompt("ラベル名を設定してください")
-  labelNameDisplay(label)
+  changeLabelNameDisplay(label)
   changeLabelBtn.innerHTML="ラベル："+labelNameDisplay
   localStorage.setItem("label", label);
   console.log("changeLabelBtn.addEventListener_1_label="+label+labelNameDisplay)
 })
 
-console.log("test1")
+console.log("test3")
 //全消去ボタンクリック
 allDeleteBtn.addEventListener("click",function(){
   const removeBtns = savedWordsContainer.querySelectorAll(".removeBtn")
