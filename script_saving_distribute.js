@@ -863,14 +863,17 @@ function changeLabelNameDisplay(newname){//ボタンに表示する用の文字�
 }
 
 changeLabelBtn.addEventListener("click",function(){
-  label=prompt("ラベル名を設定してください")
-  changeLabelNameDisplay(label)
-  changeLabelBtn.innerHTML="ラベル："+labelNameDisplay
-  localStorage.setItem("label", label);
-  console.log("changeLabelBtn.addEventListener_1_label="+label+labelNameDisplay)
+  let newname =prompt("ラベル名を設定してください")
+  if(newname!==null){//キャンセルが選択されるとnullが返るので、nullのときは何もしない
+    label=newname
+    changeLabelNameDisplay(label)
+    changeLabelBtn.innerHTML="ラベル："+labelNameDisplay
+    localStorage.setItem("label", label);
+    console.log("changeLabelBtn.addEventListener_1_label="+label+labelNameDisplay)
+  }
 })
 
-console.log("test3")
+console.log("test4")
 //全消去ボタンクリック
 allDeleteBtn.addEventListener("click",function(){
   const removeBtns = savedWordsContainer.querySelectorAll(".removeBtn")
