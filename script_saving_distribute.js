@@ -756,6 +756,13 @@ exportBtn.addEventListener("click", exportToExcel);
 //自動保存モードクリック
 autoSaveBtn.addEventListener("click",autoSaveMode)
 
+//ラベル付与
+let tytle = ""
+changeTytleBtn.addEventListener("click",function(){
+  tytle=prompt("名前を入力してください")
+  console.log("changeTytleBtn.addEventListener_1")
+})
+
 //全消去ボタンクリック
 allDeleteBtn.addEventListener("click",function(){
   const removeBtns = savedWordsContainer.querySelectorAll(".removeBtn")
