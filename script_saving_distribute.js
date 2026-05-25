@@ -846,12 +846,27 @@ exportBtn.addEventListener("click", exportToExcel);
 //自動保存モードクリック
 autoSaveBtn.addEventListener("click",autoSaveMode)
 
-//ラベル付与
-let label = ""
+//ラベル
+let labelNameDisplay =""
+let label=localStorage.getItem("label") || "";//以前のラベル読み込み
 console.log("label="+label)
-changeTytleBtn.addEventListener("click",function(){
-  label=prompt("名前を入力してください")
-  console.log("changeTytleBtn.addEventListener_1_label="+label)
+changeLabelNameDisplay(label)
+changeLabelBtn.innerHTML="ラベル："+labelNameDisplay
+
+function changeLabelNameDisplay(newname){//ボタンに表示する用の文字を用意する
+  if (newname===""){//空文字ならなしと表示する
+    labelNameDisplay ="なし"
+  }else{//それ以外はそのまま
+    labelNameDisplay=newname
+  }
+  console.log("function changeLabelNameDisplay(newname){"+newname)
+}
+
+changeLabelBtn.addEventListener("click",function(){
+  label=prompt("ラベル名を設定してください")
+  changeLabelBtn.innerHTML="ラベル："+labelNameDisplay
+  localStorage.setItem("label", label);
+  console.log("changeLabelBtn.addEventListener_1_label="+label+labelNameDisplay)
 })
 
 //全消去ボタンクリック
