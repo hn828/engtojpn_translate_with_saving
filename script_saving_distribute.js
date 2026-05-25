@@ -623,7 +623,7 @@ searchInput.addEventListener("keydown", (e) => {
 
 
 //以下保存機能追加用
-let savedWords=[];
+let savedWords=JSON.parse(localStorage.getItem("savedWords")) || [];
 //const translationContainer = document.getElementById("translationContainer");
 const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
@@ -681,6 +681,7 @@ function allDelete(){
 }
 
 //表示
+
 function renderSavedWords() {
   //const container = document.getElementById("savedWords");//外に書いた
   container.innerHTML = savedWords.map(item =>`
