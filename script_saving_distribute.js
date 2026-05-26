@@ -723,6 +723,7 @@ let savedWords=JSON.parse(localStorage.getItem("savedWords")) || [];
 const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
 let autoSave=false
+renderSavedWords()
 
 //保存機能function
 //保存
