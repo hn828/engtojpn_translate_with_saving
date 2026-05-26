@@ -583,8 +583,10 @@ searchInput.addEventListener("input", () => {
       <div class="word-block">
         <details>
           <summary>
+            <button class="saveBtn" data-index="${index}" data-phrase="${phrase}" data-short="${short}" data-full="${full}">
+保存
+            </button> 
             ${phrase}→${short}
-            <button class="saveBtn" data-index="${index}" data-phrase="${phrase}" data-short="${short}" data-full="${full}">保存</button> 
           </summary>
           <div>${full}</div>
         </details>
@@ -819,8 +821,11 @@ function autoSaveMode(){
 //画面下部のcontainer
 const savedWordsContainer = document.getElementById("savedWordsContainer");
 const tableContainer = document.getElementById("tableContainer");
-savedWordsContainer.style.marginBottom =
-    tableContainer.offsetHeight + "px";
+function marginBottom(){
+  savedWordsContainer.style.marginBottom =tableContainer.offsetHeight + "px";
+}
+marginBottom()//初め
+window.addEventListener("resize",marginBottom())  //ウィンドウサイズが変わった時  
 
 //保存機能クリック
 //保存ボタンクリック
