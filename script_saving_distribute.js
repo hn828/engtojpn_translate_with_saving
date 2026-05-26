@@ -583,10 +583,10 @@ searchInput.addEventListener("input", () => {
       <div class="word-block">
         <details>
           <summary>
-            <button class="saveBtn" data-index="${index}" data-phrase="${phrase}" data-short="${short}" data-full="${full}">
-保存
-            </button> 
             ${phrase}→${short}
+            <button class="saveBtn btn" data-index="${index}" data-phrase="${phrase}" data-short="${short}" data-full="${full}">
+            保存
+            </button>
           </summary>
           <div>${full}</div>
         </details>
@@ -599,6 +599,20 @@ searchInput.addEventListener("input", () => {
 
   }
 );
+/*
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-plus">
+	            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M9 12h6" />
+              <path d="M12 9v6" />
+              <path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14" />
+            </svg>
+            .saveBtn{
+            padding:0;
+            border:none;
+            background:none;
+            }
+
+*/
 
 //キーダウン
 searchInput.addEventListener("keydown", (e) => {
@@ -658,10 +672,6 @@ searchInput.addEventListener("keydown", (e) => {
         }
       }
     }
-  }    
-  if(e.shiftKey && e.key === "Enter"){
-    autoSaveMode()
-    //console.log("searchInput.addEventListener_Shift+Enter")
   }
 
   //下矢印　全開け
@@ -770,12 +780,13 @@ function allDelete(){
 
 function renderSavedWords() {
   //const container = document.getElementById("savedWords");//外に書いた
+  //container.innerHTML = [...savedWords].reverse().map(item =>`
   container.innerHTML = savedWords.map(item =>`
     <div class="word-block">
       <details>
         <summary>
           ${item.phrase}→${item.short}
-          <button class="removeBtn" data-phrase="${item.phrase}">×</button>
+          <button class="removeBtn btn" data-phrase="${item.phrase}">×</button>
         </summary>
        <div>${item.full}</div>
       </details>
