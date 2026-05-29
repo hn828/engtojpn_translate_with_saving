@@ -726,15 +726,13 @@ let savedWords=JSON.parse(localStorage.getItem("savedWords")) || [];
 const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
 let autoSave=false
-const isWindows =
-  /Windows/i.test(navigator.userAgent);//スマホかタブレットの場合
-const isMobile = window.matchMedia("(pointer: coarse)").matches;
 let showSavedWords=true
-if(isMobile){
-  console.log("if(isMobile){_1"+navigator.userAgent)
+const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
+if(isMobile){//スマホかタブレットの場合
+  //console.log("if(isMobile){_1"+navigator.userAgent)
   showSavedWords=false
-  document.body.style.backgroundColor = "red";
-  document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
+  //document.body.style.backgroundColor = "red";
+  //document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
   Keyboard.open(searchInput.value,
     function(currentValue){
       searchInput.value=currentValue
@@ -742,8 +740,8 @@ if(isMobile){
     }
   )
 }else{
-  console.log("if(isMobile){_2"+navigator.userAgent)
-  document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
+  //console.log("if(isMobile){_2"+navigator.userAgent)
+  //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
   renderSavedWords()
 }
 //保存機能function
