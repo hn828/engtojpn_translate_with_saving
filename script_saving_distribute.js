@@ -514,7 +514,11 @@ document.addEventListener("click",()=>{
 
 //検索欄_入力
 let resultArray=[];
-searchInput.addEventListener("input", () => {
+searchInput.addEventListener("input", ()=>{
+  Keyboard.properties.value=searchInput.value
+  runSearch()})
+  
+function runSearch() {
     if (!dictionary || !dictionary2) {
       console.log("辞書がまだロードされていません");
       return;
@@ -598,7 +602,6 @@ searchInput.addEventListener("input", () => {
     //console.log("searchInput_translationText.innerHTML",translationText.innerHTML)
 
   }
-);
 /*
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-square-plus">
 	            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -901,3 +904,19 @@ allDeleteBtn.addEventListener("click",function(){
     }
   }
 });
+
+//キーボード
+keyboardBtn.addEventListener("click",function(){
+  if(Keyboard.elements.main.classList.contains("keyboard--hidden")){
+    console.log("keyboardBtn.addEventListener(_1")
+    Keyboard.open(searchInput.value,
+      function(currentValue){
+        searchInput.value=currentValue
+        runSearch()
+      }
+    )
+  }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){
+    console.log("keyboardBtn.addEventListener(_2")
+    Keyboard.close()
+  }
+})
