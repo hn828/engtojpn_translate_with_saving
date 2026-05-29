@@ -726,8 +726,9 @@ let savedWords=JSON.parse(localStorage.getItem("savedWords")) || [];
 const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
 let autoSave=false
-const isMobile =
-  /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);//スマホかタブレットの場合
+const isWindows =
+  /Windows/i.test(navigator.userAgent);//スマホかタブレットの場合
+const isMobile = window.matchMedia("(pointer: coarse)").matches;
 let showSavedWords=true
 if(isMobile){
   console.log("if(isMobile){_1"+navigator.userAgent)
