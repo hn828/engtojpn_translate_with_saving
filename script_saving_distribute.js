@@ -745,8 +745,6 @@ if(isMobile){
   document.body.innerHTML="if(isMobile){_1"+isMobile+navigator.userAgent
   renderSavedWords()
 }
-  document.body.innerHTML="if(isMobile){_1"+isMobile+navigator.userAgent
-
 //保存機能function
 //保存
 function save(phrase,short,full){
