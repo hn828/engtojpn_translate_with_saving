@@ -19,11 +19,13 @@ const Keyboard={
         this.elements.main=document.createElement("div")
         this.elements.keysContainer=document.createElement("div")
 
-        this.elements.main.classList.add("keyboard","1keyborad--hidden")
+        this.elements.main.classList.add("keyboard","keyboard--hidden")
         this.elements.keysContainer.classList.add("keyboard__keys")
+        this.elements.keysContainer.appendChild(this._createKeys())
 
         this.elements.main.appendChild(this.elements.keysContainer)//keysContainer を main の子要素に追加。
         document.body.appendChild(this.elements.main)//完成したキーボードをbodyへ追加。
+        document.query
     },
 
     _createKeys(){//_は外部から呼ばないprivateなものという意味。人間向けの説明で、機能的には何も変わらない。
@@ -36,10 +38,10 @@ const Keyboard={
         ];
 
         const createIconHTML =(icon_name)=>{
-            return <i class="material-icons">${icon_name}</i>
+            return `<i class="material-icons">${icon_name}</i>`
         }
 
-        keyLayout_forEach(key=>{
+        keyLayout.forEach(key=>{
             const keyElement=document.createElement("button")
             const insertLineBreak=["backspace","l","enter"].indexOf(key)!==-1
             
@@ -63,7 +65,7 @@ const Keyboard={
                         this._triggerEvent("oninput")
                     })
                     break
-                case "enter":
+                case "space":
                     keyElement.classList.add("keyboard__key-extra-wide")
                     keyElement.innerHTML=createIconHTML("space_bar")
                     keyElement.addEventListener("click",()=>{
@@ -74,27 +76,46 @@ const Keyboard={
                 default:
                     keyElement.textContent=key
                     keyElement.addEventListener("click",()=>{
-                    this.properties.value+=key
-                    this._triggerEvent("oninput")
+                        this.properties.value+=key
+                        this._triggerEvent("oninput")
                     })
                     break
             }
+            fragment.appendChild(keyElement)
+            if(insertLineBreak){
+                fragment.appendChild(document.createElement("br"))
+            }
         })
+        return fragment
     },
 
     _triggerEvent(handlerName){
         console.log("Event triggered"+handlerName)
+        if(typeof this.eventHandlers[handlerName]=="function"){
+            this.eventHandlers[handlerName](this.properties.value)//保持した入力内容を渡す
+        }
     },
 
     open(initialValue,oninput,onclose){
-
+        this.properties.value=initialValue||"",
+        this.eventHandlers.oninput=oninput;
+        this.eventHandlers.onclose=onclose;
+        this.elements.main.classList.remove("keyboard--hidden")
     },
 
     close(){
-
+        this.properties.value="";
+        this.eventHandlers.oninput=oninput;
+        this.eventHandlers.onclose=onclose;
+        this.elements.main.classList.add("keyboard--hidden")        
     }
 }
 
 window.addEventListener("DOMContentLoaded",function(){
     Keyboard.init();
+    Keyboard.open("decode",function(currentValue){
+        console.log(currentValue);
+    },function(currentValue){
+        console.log("keyboard closed!"+currentValue)
+    })
 })
