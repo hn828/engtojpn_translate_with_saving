@@ -730,8 +730,10 @@ const isMobile =
   /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);//スマホかタブレットの場合
 let showSavedWords=true
 if(isMobile){
-  console.log("if(isMobile){")
+  console.log("if(isMobile){_1"+navigator.userAgent)
   showSavedWords=false
+  document.body.style.backgroundColor = "red";
+  document.body.innerHTML="if(isMobile){_11"+isMobile+navigator.userAgent
   Keyboard.open(searchInput.value,
     function(currentValue){
       searchInput.value=currentValue
@@ -739,8 +741,11 @@ if(isMobile){
     }
   )
 }else{
+  console.log("if(isMobile){_2"+navigator.userAgent)
+  document.body.innerHTML="if(isMobile){_1"+isMobile+navigator.userAgent
   renderSavedWords()
 }
+  document.body.innerHTML="if(isMobile){_1"+isMobile+navigator.userAgent
 
 //保存機能function
 //保存
