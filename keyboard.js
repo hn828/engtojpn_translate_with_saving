@@ -15,7 +15,7 @@ const Keyboard={
         value:""
     },
 
-    init(){//keybordとkeysを作る
+    init(){//keyboardとkeysを作る
         this.elements.main=document.createElement("div")
         this.elements.keysContainer=document.createElement("div")
 
@@ -66,11 +66,27 @@ const Keyboard={
                     })
                     break
                 case "space":
-                    keyElement.classList.add("keyboard__key-extra-wide")
+                    keyElement.classList.add("keyboard__key--extra-wide")
                     keyElement.innerHTML=createIconHTML("space_bar")
                     keyElement.addEventListener("click",()=>{
                         this.properties.value+=" "
                         this._triggerEvent("oninput")
+                    })
+                    break
+                case "←":
+                    keyElement.classList.add("keyboard__key--wide")
+                    keyElement.innerHTML=createIconHTML("keyboard_arrow_left")
+                    keyElement.addEventListener("click",()=>{
+                        //this.properties.value+=" "
+                        //this._triggerEvent("oninput")
+                    })
+                    break
+                case "→":
+                    keyElement.classList.add("keyboard__key--wide")
+                    keyElement.innerHTML=createIconHTML("keyboard_arrow_right")
+                    keyElement.addEventListener("click",()=>{
+                        //this.properties.value+=" "
+                        //this._triggerEvent("oninput")
                     })
                     break
                 default:
@@ -97,7 +113,7 @@ const Keyboard={
     },
 
     open(initialValue,oninput,onclose){
-        this.properties.value=initialValue||"",
+        this.properties.value=initialValue||"";
         this.eventHandlers.oninput=oninput;
         this.eventHandlers.onclose=onclose;
         this.elements.main.classList.remove("keyboard--hidden")
@@ -113,9 +129,10 @@ const Keyboard={
 
 window.addEventListener("DOMContentLoaded",function(){
     Keyboard.init();
+    /*
     Keyboard.open("decode",function(currentValue){
         console.log(currentValue);
     },function(currentValue){
         console.log("keyboard closed!"+currentValue)
-    })
+    })*/
 })
