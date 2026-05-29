@@ -517,7 +517,7 @@ let resultArray=[];
 searchInput.addEventListener("input", ()=>{
   Keyboard.properties.value=searchInput.value
   runSearch()})
-  
+
 function runSearch() {
     if (!dictionary || !dictionary2) {
       console.log("辞書がまだロードされていません");
@@ -726,6 +726,7 @@ let savedWords=JSON.parse(localStorage.getItem("savedWords")) || [];
 const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
 let autoSave=false
+let showSavedWords=true
 renderSavedWords()
 
 //保存機能function
@@ -740,7 +741,9 @@ function save(phrase,short,full){
     console.log("function save(phrase,short,full){"+label+","+savedWords[0].label)
   }
   localStorage.setItem("savedWords", JSON.stringify(savedWords));
-  renderSavedWords()
+  if(showSavedWords){
+    renderSavedWords()
+  }
 }
 
 //自動保存
@@ -764,8 +767,9 @@ function doAutoSave(){
 function remove(phrase){
   savedWords=savedWords.filter(item=>item.phrase!==phrase);
   localStorage.setItem("savedWords", JSON.stringify(savedWords));
-  renderSavedWords()
-}
+  if(showSavedWords){
+    renderSavedWords()
+  }}
 
 //全消去
 function allDelete(){
@@ -776,8 +780,9 @@ function allDelete(){
     console.log("function allDelete"+phrase)
   }
   localStorage.setItem("savedWords", JSON.stringify(savedWords));
-  renderSavedWords()
-  console.log("function allDelete_1")
+  if(showSavedWords){
+    renderSavedWords()
+  }  console.log("function allDelete_1")
 }
 
 //表示
@@ -796,6 +801,12 @@ function renderSavedWords() {
       </details>
     </div>
   `).join("");
+}
+
+//非表示
+function hideSavedWords(){
+  console.log("hidesavewords1")
+  container.innerHTML = ""
 }
 
 //Excelファイルに保存
@@ -838,9 +849,16 @@ const savedWordsContainer = document.getElementById("savedWordsContainer");
 const tableContainer = document.getElementById("tableContainer");
 function marginBottom(){
   savedWordsContainer.style.marginBottom =tableContainer.offsetHeight + "px";
+  Keyboard.elements.main.style.marginBottom =tableContainer.offsetHeight + "px";
+  console.log("marginbottom")
 }
-marginBottom()//初め
-window.addEventListener("resize",marginBottom())  //ウィンドウサイズが変わった時  
+document.addEventListener(
+  "keyboardInitFinished",
+  function(){
+    marginBottom()
+  }
+)
+window.addEventListener("resize",marginBottom)  //ウィンドウサイズが変わった時  
 
 //保存機能クリック
 //保存ボタンクリック
@@ -909,6 +927,7 @@ allDeleteBtn.addEventListener("click",function(){
 keyboardBtn.addEventListener("click",function(){
   if(Keyboard.elements.main.classList.contains("keyboard--hidden")){
     console.log("keyboardBtn.addEventListener(_1")
+    hideSavedWords()
     Keyboard.open(searchInput.value,
       function(currentValue){
         searchInput.value=currentValue
@@ -917,6 +936,7 @@ keyboardBtn.addEventListener("click",function(){
     )
   }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){
     console.log("keyboardBtn.addEventListener(_2")
+    renderSavedWords()
     Keyboard.close()
   }
 })

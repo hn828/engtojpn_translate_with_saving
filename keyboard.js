@@ -26,6 +26,10 @@ const Keyboard={
         this.elements.main.appendChild(this.elements.keysContainer)//keysContainer を main の子要素に追加。
         document.body.appendChild(this.elements.main)//完成したキーボードをbodyへ追加。
         document.query
+        console.log("init")
+        document.dispatchEvent(
+            new Event("keyboardInitFinished")
+        )
     },
 
     _createKeys(){//_は外部から呼ばないprivateなものという意味。人間向けの説明で、機能的には何も変わらない。
