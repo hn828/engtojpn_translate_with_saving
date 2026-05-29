@@ -173,6 +173,13 @@
                 position:relative;
 
             }
+            .keyboard__key--wide{
+                width: 12%;
+            }
+            .keyboard__key--extra-wide{
+                width: 36%;
+                max-width: 500px;
+            }
             .keyboard__key:active{
                 background-color:rgba(255,255,255,0.12);
             }
@@ -182,13 +189,7 @@
         <input id="inputText" type="text" placeholder = "検索ワードを入力">
         <div id="translationText"></div>
         <div id="translationHistory"></div>
-        <div class="keyboard">
-            <div class="keyboard__keys">
-                <buttun type="button" class="keyboard__key">a</buttun>
-                <buttun type="button" class="keyboard__key keyboard__key--wide"><i class="material-icons">backspace</i></buttun>
 
-            </div>
-        </div>
         <div id="savedWordsContainer">
             <div id="savedWords">
                  
@@ -206,6 +207,6 @@
         </div>              
         <script src="xlsx.full.min.js"></script>
         <script src="script_saving_distribute.js"></script>
-        <script srs="keyboard.js"></script>
+        <script src="keyboard.js"></script>
     </body>
 </html>
