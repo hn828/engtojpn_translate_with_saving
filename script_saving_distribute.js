@@ -726,8 +726,21 @@ let savedWords=JSON.parse(localStorage.getItem("savedWords")) || [];
 const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
 let autoSave=false
+const isMobile =
+  /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);//スマホかタブレットの場合
 let showSavedWords=true
-renderSavedWords()
+if(isMobile){
+  console.log("if(isMobile){")
+  showSavedWords=false
+  Keyboard.open(searchInput.value,
+    function(currentValue){
+      searchInput.value=currentValue
+      runSearch()
+    }
+  )
+}else{
+  renderSavedWords()
+}
 
 //保存機能function
 //保存
@@ -925,7 +938,7 @@ allDeleteBtn.addEventListener("click",function(){
 
 //キーボード
 keyboardBtn.addEventListener("click",function(){
-  if(Keyboard.elements.main.classList.contains("keyboard--hidden")){
+  if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき
     console.log("keyboardBtn.addEventListener(_1")
     hideSavedWords()
     showSavedWords=false
@@ -935,7 +948,7 @@ keyboardBtn.addEventListener("click",function(){
         runSearch()
       }
     )
-  }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){
+  }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){//表示されているとき
     console.log("keyboardBtn.addEventListener(_2")
     renderSavedWords()
     showSavedWords=true
@@ -973,3 +986,4 @@ document.addEventListener(
     Keyboard.properties.value=""
   }
 )
+
