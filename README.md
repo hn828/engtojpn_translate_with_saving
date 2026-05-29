@@ -1,5 +1,5 @@
-## engtojpn_translate_with_saving
-検索欄に英語の文章を入力すると、各単語の訳を表示します。一度に複数の単語の意味を辞書で確認することができます。<br>
+<h2>engtojpn_translate_with_saving</h2>
+効率的＆速い 日英翻訳サイト<br>検索欄に英語の文章を入力すると、各単語の訳を表示します。一度に複数の単語の意味を辞書で確認することができます。<br>
 単語を保存し、Excelファイルとして取得できます。<br>
 以下のURLからアクセスできます。<br>
 https://hn828.github.io/engtojpn_translate_with_saving/
