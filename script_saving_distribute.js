@@ -928,6 +928,7 @@ keyboardBtn.addEventListener("click",function(){
   if(Keyboard.elements.main.classList.contains("keyboard--hidden")){
     console.log("keyboardBtn.addEventListener(_1")
     hideSavedWords()
+    showSavedWords=false
     Keyboard.open(searchInput.value,
       function(currentValue){
         searchInput.value=currentValue
@@ -937,6 +938,38 @@ keyboardBtn.addEventListener("click",function(){
   }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){
     console.log("keyboardBtn.addEventListener(_2")
     renderSavedWords()
+    showSavedWords=true
     Keyboard.close()
   }
 })
+document.addEventListener(
+  "ArrowRightClicked",
+  function(){
+    searchInput.setSelectionRange(searchInput.selectionStart + 1, searchInput.selectionStart + 1);
+    searchInput.focus();
+  }
+)
+
+document.addEventListener(
+  "ArrowLeftClicked",
+  function(){
+    searchInput.setSelectionRange(searchInput.selectionStart -1, searchInput.selectionStart -1);
+    searchInput.focus();
+  }
+)
+
+document.addEventListener(
+  "enterClicked",
+  function(){
+    if(searchInput.value.trim()==="")return;//入力欄に何もなければ何もしない
+    translationHistory.insertAdjacentHTML(
+      "afterbegin",`<div class=history-block>${translationText.innerHTML}</div>`
+    )
+    searchInput.value = ""
+    if(autoSave===true){
+      doAutoSave()
+    }
+    translationText.innerHTML=""
+    Keyboard.properties.value=""
+  }
+)

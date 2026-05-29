@@ -65,8 +65,9 @@ const Keyboard={
                     keyElement.classList.add("keyboard__key--wide")
                     keyElement.innerHTML=createIconHTML("keyboard_return")
                     keyElement.addEventListener("click",()=>{
-                        this.properties.value+="\n"
-                        this._triggerEvent("oninput")
+                        document.dispatchEvent(                            
+                            new Event("enterClicked")
+                        )
                     })
                     break
                 case "space":
@@ -81,16 +82,20 @@ const Keyboard={
                     keyElement.classList.add("keyboard__key--wide")
                     keyElement.innerHTML=createIconHTML("keyboard_arrow_left")
                     keyElement.addEventListener("click",()=>{
-                        //this.properties.value+=" "
-                        //this._triggerEvent("oninput")
+                        document.dispatchEvent(                            
+                            new Event("ArrowLeftClicked")
+                        )
+                        this._triggerEvent("oninput")
                     })
                     break
                 case "→":
                     keyElement.classList.add("keyboard__key--wide")
                     keyElement.innerHTML=createIconHTML("keyboard_arrow_right")
                     keyElement.addEventListener("click",()=>{
-                        //this.properties.value+=" "
-                        //this._triggerEvent("oninput")
+                        document.dispatchEvent(                            
+                            new Event("ArrowRightClicked")
+                        )
+                        this._triggerEvent("oninput")
                     })
                     break
                 default:
