@@ -36,9 +36,9 @@ const Keyboard={
         const fragment=document.createDocumentFragment();
         const keyLayout =[
             "q","w","e","r","t","y","u","i","o","p","backspace",
-            "a","s","d","f","g","h","j","k","l",
-            "z","x","c","v","b","n","m","enter",
-            "space","←","→",
+            "_halfblank","a","s","d","f","g","h","j","k","l","enter",
+            "_fullblank","z","x","c","v","b","n","m",
+            "space","←","→"
         ];
 
         const createIconHTML =(icon_name)=>{
@@ -47,12 +47,24 @@ const Keyboard={
 
         keyLayout.forEach(key=>{
             const keyElement=document.createElement("button")
-            const insertLineBreak=["backspace","l","enter"].indexOf(key)!==-1
+            //const insertLineBreak=["backspace","enter","m"].indexOf(key)!==-1
             
             keyElement.setAttribute("type","button")
             keyElement.classList.add("keyboard__key")
-
+            if (key==="_halfblank"){
+                const spacer1=document.createElement("div")
+                spacer1.style.gridColumn="span 1"
+                fragment.appendChild(spacer1)
+                return
+            }
+            if(key=== "_fullblank"){
+                const spacer2=document.createElement("div")
+                spacer2.style.gridColumn="span 2"
+                fragment.appendChild(spacer2)
+                return
+            }
             switch(key){
+
                 case "backspace":
                     keyElement.classList.add("keyboard__key--wide")
                     keyElement.innerHTML=createIconHTML("backspace")
@@ -62,7 +74,7 @@ const Keyboard={
                     })
                     break
                 case "enter":
-                    keyElement.classList.add("keyboard__key--wide")
+                    keyElement.classList.add("keyboard__key--mid--wide","keyboard__key--tall")
                     keyElement.innerHTML=createIconHTML("keyboard_return")
                     keyElement.addEventListener("click",()=>{
                         document.dispatchEvent(                            
@@ -107,9 +119,9 @@ const Keyboard={
                     break
             }
             fragment.appendChild(keyElement)
-            if(insertLineBreak){
-                fragment.appendChild(document.createElement("br"))
-            }
+            //if(insertLineBreak){
+                //fragment.appendChild(document.createElement("br"))
+            //}
         })
         return fragment
     },
@@ -145,3 +157,21 @@ window.addEventListener("DOMContentLoaded",function(){
         console.log("keyboard closed!"+currentValue)
     })*/
 })
+
+/*前のキーボード設定
+keys
+                text-align: center;
+key
+                width:6%;
+                max-width: 90px;
+                vertical-align: top;
+key--wide
+                width: 12%;
+key--extra--wide
+                width: 70%;
+                max-width: 500px;
+key--tall
+                height: 104px;
+
+
+*/
