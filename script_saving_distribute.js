@@ -886,21 +886,63 @@ function autoSaveMode(){
 //画面下部のcontainer
 const savedWordsContainer = document.getElementById("savedWordsContainer");
 const tableContainer = document.getElementById("tableContainer");
+/*
+
+const buttons = tableContainer.querySelectorAll("td");
+const tr =tableContainer.querySelector("tr");
 function marginBottom(){
-  savedWordsContainer.style.marginBottom =tableContainer.offsetHeight + "px";
+  savedWordsContainer.style.marginBottom = tableContainer.offsetHeight+ "px";
   Keyboard.elements.main.style.marginBottom =tableContainer.offsetHeight + "px";
   console.log("marginbottom")
-  console.log(Keyboard)
-console.log(Keyboard.elements)
-console.log(Keyboard.elements.main)
 }
+function buttonHeight(){
+  /*
+  buttons.forEach(button=>{
+    button.style.height = "auto";
+  });
+    buttons.forEach(button=>{
+    button.style.height =
+      tableContainer.offsetHeight - 13 + "px";
+  });
+  
+    //tr.style.height = "auto";
+    //tr.style.height = tableContainer.offsetHeight - 13 + "px";
+  buttons[0].style.height = "auto";
+  buttons[0].style.height = tableContainer.offsetHeight - 13 + "px";
+
+
+}
+function marginBottomSavedwords(){
+  buttons.forEach(button=>{
+    button.style.height = "auto";
+  });
+  savedWordsContainer.style.marginBottom = marginPx=tableContainer.offsetHeight+ "px";
+  console.log("marginbottom")
+}
+if (virtualKeyboardOpen===true){}
+
 document.addEventListener(
   "keyboardInitFinished",
   function(){
     marginBottom()
   }
 )
-window.addEventListener("resize",marginBottom)  //ウィンドウサイズが変わった時  
+//window.addEventListener("resize",marginBottom())  //ウィンドウサイズが変わった時  
+let resizeTimer;
+window.addEventListener("resize", () => {
+  //if (resizeTimer) return;
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    resizeTimer = null;
+    if (virtualKeyboardOpen===false){
+      buttonHeight()
+      marginBottom()
+
+    }
+  }, 500);
+});
+*/
+
 
 //保存機能クリック
 //保存ボタンクリック

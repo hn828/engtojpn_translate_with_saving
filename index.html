@@ -66,18 +66,22 @@
             .word-block div {
             padding-left:15px;
             margin-top: 0px;
+            }
+            #bottomArea{
+                position:fixed;
+                max-height:35%;
+                bottom:0;
+                left: 0;
+                right: 0;
+                display: flex;
+                flex-direction: column;
             } 
             #savedWordsContainer{
-            position:fixed;
-            bottom:0;
-            left:0;
-            right:0;
             max-height:25%;
             overflow-y:auto;
             background:rgb(230,230,230);
             border-top:1px solid #ccc;
             padding:8px;
-            padding-bottom: 0px;
             }
             .removeBtn{
             font-size: 100%;
@@ -87,22 +91,33 @@
             padding-right: 5px;
             }
             #tableContainer{
-            position:fixed;
             bottom:0;
             left:0;
             right:0;
-            max-height:10%;
-            overflow-y:auto;
             background:rgb(230,230,230);
             padding-left:24px;
             padding-right:24px;
             padding-bottom:8px;            
             }
             #btnTable{
-            position:absolute
-            width 100%;        /* 親幅いっぱいまで広げる */
-            display: block;     /* margin: auto を効かせるために必要 */
-            margin:auto;
+                width:100%;
+                table-layout:fixed;
+                border-collapse:collapse;
+            }
+            #btnTable td{
+                height:100%;
+                padding : 2px;
+            }
+
+            #btnTable button{
+                display:block;
+                width:100%;
+                height:100%;
+                box-sizing:border-box;
+
+                white-space:normal;
+                word-break:break-word;
+                line-height:1.2;
             }
             .btn{
             background-color: rgba(216, 216, 216,0.5);
@@ -193,22 +208,21 @@
         <input id="inputText" type="text" placeholder = "検索ワードを入力" class="use-keyboard-input">
         <div id="translationText"></div>
         <div id="translationHistory"></div>
-
-        <div id="savedWordsContainer">
-            <div id="savedWords">
-                 
+        <div id="bottomArea">
+            <div id="savedWordsContainer">
+                <div id="savedWords"></div>
             </div>
-        </div>
-        <div id="tableContainer">
-            <table id="btnTable">
-                <tr>
-                    <td><button id="keyboardBtn" ><i class="material-icons">keyboard</i></button></td>
-                    <td><button id="autoSaveBtn">自動保存モード：off</button></td>
-                    <td><button id="changeLabelBtn">ラベル：</button></td>
-                    <td><button id="allDeleteBtn" >全消去</button></td>
-                    <td><button id="exportBtn" >Excelデータを取得</button></td>
-                </tr>
-            </table>  
+            <div id="tableContainer">
+                <table id="btnTable">
+                    <tr id="btnTableRow">
+                        <td><button id="keyboardBtn" ><i class="material-icons">keyboard</i></button></td>
+                        <td><button id="autoSaveBtn">自動保存モード：off</button></td>
+                        <td><button id="changeLabelBtn">ラベル：</button></td>
+                        <td><button id="allDeleteBtn" >全消去</button></td>
+                        <td><button id="exportBtn" >Excelデータを取得</button></td>
+                    </tr>
+                </table>  
+            </div>
         </div>              
         <script src="xlsx.full.min.js"></script>
         <script src="keyboard.js"></script>
