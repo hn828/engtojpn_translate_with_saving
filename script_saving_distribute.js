@@ -727,23 +727,32 @@ const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
 let autoSave=false
 let showSavedWords=true
+
+//はじめにキーボードを表示するか、保存した単語を表示するか
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
+const virtualKeyboardOpen =false
 if(isMobile){//スマホかタブレットの場合
   //console.log("if(isMobile){_1"+navigator.userAgent)
   showSavedWords=false
   //document.body.style.backgroundColor = "red";
   //document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
+  searchInput.readOnly=true
   Keyboard.open(searchInput.value,
     function(currentValue){
       searchInput.value=currentValue
       runSearch()
     }
   )
+  virtualKeyboardOpen=true
 }else{
   //console.log("if(isMobile){_2"+navigator.userAgent)
   //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
   renderSavedWords()
 }
+
+
+
+
 //保存機能function
 //保存
 function save(phrase,short,full){
@@ -942,6 +951,7 @@ allDeleteBtn.addEventListener("click",function(){
 keyboardBtn.addEventListener("click",function(){
   if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき
     console.log("keyboardBtn.addEventListener(_1")
+    if(isMobile)searchInput.readOnly=true
     hideSavedWords()
     showSavedWords=false
     Keyboard.open(searchInput.value,
@@ -950,14 +960,17 @@ keyboardBtn.addEventListener("click",function(){
         runSearch()
       }
     )
+    virtualKeyboardOpen=true
   }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){//表示されているとき
     console.log("keyboardBtn.addEventListener(_2")
+    searchInput.readOnly=false
     renderSavedWords()
     showSavedWords=true
     Keyboard.close()
+    virtualKeyboardOpen=false
   }
 })
-document.addEventListener(
+document.addEventListener(//仮想キーボードの→ボタン
   "ArrowRightClicked",
   function(){
     searchInput.setSelectionRange(searchInput.selectionStart + 1, searchInput.selectionStart + 1);
@@ -965,7 +978,7 @@ document.addEventListener(
   }
 )
 
-document.addEventListener(
+document.addEventListener(//仮想キーボードの←ボタン
   "ArrowLeftClicked",
   function(){
     searchInput.setSelectionRange(searchInput.selectionStart -1, searchInput.selectionStart -1);
