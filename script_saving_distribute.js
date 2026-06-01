@@ -679,7 +679,7 @@ searchInput.addEventListener("keydown", (e) => {
 
   //下矢印　全開け
   if(e.key==="ArrowDown"){
-    e.preventDefault
+    e.preventDefault()
     if (translationText.innerHTML!==""){
       const details = translationText.querySelectorAll("details");
       for(const e of [...details]){
@@ -730,7 +730,7 @@ let showSavedWords=true
 
 //はじめにキーボードを表示するか、保存した単語を表示するか
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
-const virtualKeyboardOpen =false
+let virtualKeyboardOpen =false
 if(isMobile){//スマホかタブレットの場合
   //console.log("if(isMobile){_1"+navigator.userAgent)
   showSavedWords=false
