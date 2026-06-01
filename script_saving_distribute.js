@@ -101,25 +101,35 @@ function lookupwords(words, m) {
   if (dictionary[phrase]) {
     let meaning1 = dictionary[phrase];
     let accumulatedMeaning = meaning1; //amir=emirなどほかに飛ばされるときの処理
-    visited.add(phrase);
+    //visited.add(phrase);
     while (meaning1.startsWith("=")) {
-      
       //let phrase2 = meaning1.replace(/^\s*=\s*/, "");
       let phrase2 = meaning1.replace(/^=([a-zA-Z]+).*/, "$1");//=wonderful / はなはだ,著しくでwonderfulを残す
       //console.log("lookupwords_meaning1=",meaning1)
       //console.log("lookupwords_phrase2=",phrase2)
-
       if (visited.has(phrase2)) {
         break;
       }
       visited.add(phrase2);
       meaning1 = dictionary[phrase2] || "参照先の訳が見つかりません";
+      let shortedMeaning1=meaning1
       shortedMeaning1 = getShortMeaning(meaning1)
       if (commonWords.includes(phrase2)){
         shortedMeaning1=getveryShortMeaning(meaning1)
       }
       accumulatedMeaning = accumulatedMeaning+ "  ※" + phrase2 + "→" +  shortedMeaning1;
       //accumulatedMeaning = shortedMeaning1 + accumulatedMeaning.replace("="+phrase2,"") 
+    }
+    while (/^[a-zA-Z]/.test(meaning1)) {   
+      let phrase2 = meaning1.replace(/^([a-zA-Z]+).*/, "$1");
+      visited.add(phrase2);
+      meaning1 = dictionary[phrase2] || "参照先の訳が見つかりません";
+      let shortedMeaning1=meaning1
+      shortedMeaning1 = getShortMeaning(meaning1)
+      if (commonWords.includes(phrase2)){
+        shortedMeaning1=getveryShortMeaning(meaning1)
+      }
+      accumulatedMeaning = accumulatedMeaning+ "  ※" + phrase2 + "→" +  shortedMeaning1;
     }
     let key = words.slice(0, 1).join(); //配列から文字列にしている
     return {
