@@ -512,11 +512,19 @@ document.addEventListener("click",()=>{
   }
 })
 
+//アイパッドで入力欄をタップしたとき元のキーボードで入力させる
+searchInput.addEventListener("click", ()=>{
+  searchInput.readOnly=false
+  searchInput.focus()
+})
+
 //検索欄_入力
 let resultArray=[];
 searchInput.addEventListener("input", ()=>{
   Keyboard.properties.value=searchInput.value
-  runSearch()})
+  runSearch()
+})
+
 
 function runSearch() {
     if (!dictionary || !dictionary2) {
@@ -710,6 +718,7 @@ searchInput.addEventListener("keydown", (e) => {
     "afterbegin",`<div class=history-block>${translationText.innerHTML}</div>`
   )
   searchInput.value = ""
+  Keyboard.properties.value=""
 
   if(autoSave===true){
     doAutoSave()
@@ -755,7 +764,6 @@ if(!isMobile){//パソコンの場合
   //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
   renderSavedWords()
 }
-document.body.style.backgroundColor = "rgb(255, 238, 238)";
 
 
 
@@ -882,6 +890,9 @@ function marginBottom(){
   savedWordsContainer.style.marginBottom =tableContainer.offsetHeight + "px";
   Keyboard.elements.main.style.marginBottom =tableContainer.offsetHeight + "px";
   console.log("marginbottom")
+  console.log(Keyboard)
+console.log(Keyboard.elements)
+console.log(Keyboard.elements.main)
 }
 document.addEventListener(
   "keyboardInitFinished",
@@ -1019,5 +1030,5 @@ window.addEventListener("error", function(e){
     " line:" + e.lineno
   )
 })
-searchInput.placeholder = "test1"
+searchInput.placeholder = "test2"
 
