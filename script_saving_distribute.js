@@ -886,17 +886,15 @@ function autoSaveMode(){
 //画面下部のcontainer
 const savedWordsContainer = document.getElementById("savedWordsContainer");
 const tableContainer = document.getElementById("tableContainer");
-/*
 
 const buttons = tableContainer.querySelectorAll("td");
-const tr =tableContainer.querySelector("tr");
+//const tr =tableContainer.querySelector("btn");
+
 function marginBottom(){
-  savedWordsContainer.style.marginBottom = tableContainer.offsetHeight+ "px";
   Keyboard.elements.main.style.marginBottom =tableContainer.offsetHeight + "px";
-  console.log("marginbottom")
 }
 function buttonHeight(){
-  /*
+  
   buttons.forEach(button=>{
     button.style.height = "auto";
   });
@@ -905,26 +903,12 @@ function buttonHeight(){
       tableContainer.offsetHeight - 13 + "px";
   });
   
-    //tr.style.height = "auto";
-    //tr.style.height = tableContainer.offsetHeight - 13 + "px";
-  buttons[0].style.height = "auto";
-  buttons[0].style.height = tableContainer.offsetHeight - 13 + "px";
-
-
 }
-function marginBottomSavedwords(){
-  buttons.forEach(button=>{
-    button.style.height = "auto";
-  });
-  savedWordsContainer.style.marginBottom = marginPx=tableContainer.offsetHeight+ "px";
-  console.log("marginbottom")
-}
-if (virtualKeyboardOpen===true){}
-
 document.addEventListener(
   "keyboardInitFinished",
   function(){
     marginBottom()
+    buttonHeight()
   }
 )
 //window.addEventListener("resize",marginBottom())  //ウィンドウサイズが変わった時  
@@ -934,14 +918,13 @@ window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     resizeTimer = null;
-    if (virtualKeyboardOpen===false){
       buttonHeight()
+    if (virtualKeyboardOpen===true){
       marginBottom()
-
     }
-  }, 500);
+  }, 200);
 });
-*/
+
 
 
 //保存機能クリック
