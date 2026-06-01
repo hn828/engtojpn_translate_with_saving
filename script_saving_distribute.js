@@ -731,24 +731,31 @@ let showSavedWords=true
 //はじめにキーボードを表示するか、保存した単語を表示するか
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
 let virtualKeyboardOpen =false
-if(isMobile){//スマホかタブレットの場合
-  //console.log("if(isMobile){_1"+navigator.userAgent)
-  showSavedWords=false
-  //document.body.style.backgroundColor = "red";
-  //document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
-  searchInput.readOnly=true
-  Keyboard.open(searchInput.value,
-    function(currentValue){
-      searchInput.value=currentValue
-      runSearch()
+document.addEventListener(
+  "keyboardInitFinished",
+  function(){
+    if(isMobile){//スマホかタブレットの場合(キーボードができるまで待つ)
+      //console.log("if(isMobile){_1"+navigator.userAgent)
+      showSavedWords=false
+    document.body.style.backgroundColor = "rgb(255, 238, 238)";
+      //document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
+      searchInput.readOnly=true
+      Keyboard.open(searchInput.value,
+        function(currentValue){
+          searchInput.value=currentValue
+          runSearch()
+        }
+      )
+      virtualKeyboardOpen=true
     }
-  )
-  virtualKeyboardOpen=true
-}else{//パソコンの場合
+  }
+)
+if(!isMobile){//パソコンの場合
   //console.log("if(isMobile){_2"+navigator.userAgent)
   //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
   renderSavedWords()
 }
+document.body.style.backgroundColor = "rgb(255, 238, 238)";
 
 
 
