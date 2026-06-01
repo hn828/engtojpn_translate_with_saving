@@ -211,6 +211,56 @@ function lookupIdiom(words) {
           return res;
         }
       }
+      if (m === 1 && phrase.endsWith("est")) {
+        //最上級est消去
+        let original4 = phrase.replace(/est$/, "");
+        res = lookupwords([original4], 1);
+        if (res) {
+          return res;
+        }
+        original4 = phrase.replace(/st$/, "");
+        res = lookupwords([original4], 1);
+        if (res) {
+          return res;
+        }
+        if (/([bcdfghjklmnpqrstvwxyz])\1est$/.test(phrase)) {
+          original4 = phrase.replace(/([bcdfghjklmnpqrstvwxyz])\1est$/, "$1");
+        }
+        res = lookupwords([original4], 1);
+        if (res) {
+          return res;
+        }
+        original4 = phrase.replace(/iest$/, "y");
+        res = lookupwords([original4], 1);
+        if (res) {
+          return res;
+        }
+      }
+      if (m === 1 && phrase.endsWith("er")) {
+        //比較級er消去
+        let original = phrase.replace(/er$/, "");
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+        original = phrase.replace(/r$/, "");
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+        if (/([bcdfghjklmnpqrstvwxyz])\1er$/.test(phrase)) {
+          original = phrase.replace(/([bcdfghjklmnpqrstvwxyz])\1er$/, "$1");
+        }
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+        original = phrase.replace(/iest$/, "y");
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+      }
     }
   }
   return {
