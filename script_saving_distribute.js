@@ -744,7 +744,7 @@ if(isMobile){//スマホかタブレットの場合
     }
   )
   virtualKeyboardOpen=true
-}else{
+}else{//パソコンの場合
   //console.log("if(isMobile){_2"+navigator.userAgent)
   //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
   renderSavedWords()
@@ -951,7 +951,7 @@ allDeleteBtn.addEventListener("click",function(){
 keyboardBtn.addEventListener("click",function(){
   if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき
     console.log("keyboardBtn.addEventListener(_1")
-    if(isMobile)searchInput.readOnly=true
+    if(isMobile){searchInput.readOnly=true}
     hideSavedWords()
     showSavedWords=false
     Keyboard.open(searchInput.value,
