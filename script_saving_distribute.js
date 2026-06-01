@@ -1002,3 +1002,13 @@ document.addEventListener(
   }
 )
 
+//ipadデバッグ用
+function debugLog(text){
+  translationHistory.innerHTML += text + "<br>"
+}
+window.addEventListener("error", function(e){
+  debugLog(
+    e.message +
+    " line:" + e.lineno
+  )
+})
