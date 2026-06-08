@@ -14,7 +14,7 @@ Promise.all([
   dictionary=dict1;
   dictionary2=dict2;
   commonWords=dict3
-  console.log("辞書読み込み完了");
+  //console.log("辞書読み込み完了");
 });
 
 const searchInput = document.getElementById("inputText");
@@ -269,6 +269,29 @@ function lookupIdiom(words) {
           return res;
         }
         original = phrase.replace(/iest$/, "y");
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+      }
+      if (m === 1 && phrase.endsWith("ly")) {
+        //副詞、形容詞ly消去
+        let original = phrase.replace(/ly$/, "");
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+        original = phrase.replace(/ally$/, "");//basically
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+        original = phrase.replace(/ily$/, "y");//happily
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+        original = phrase.replace(/ly$/, "le");//gently
         res = lookupwords([original], 1);
         if (res) {
           return res;
@@ -590,7 +613,7 @@ searchInput.addEventListener("input", ()=>{
 
 
 function runSearch() {
-    console.log("function runSearch() {_1")
+    //console.log("function runSearch() {_1")
     if (!dictionary || !dictionary2) {
       console.log("辞書がまだロードされていません");
       return;
@@ -844,7 +867,7 @@ function save(phrase,short,full){
   }else{
     const count=1
     savedWords.push({phrase,short,full,count,label})
-    console.log("function save(phrase,short,full){"+label+","+savedWords[0].label)
+    //console.log("function save(phrase,short,full){"+label+","+savedWords[0].label)
   }
   localStorage.setItem("savedWords", JSON.stringify(savedWords));
   if(showSavedWords){
@@ -862,11 +885,11 @@ function doAutoSave(){
     if(full !== "訳が見つかりません"){
       save(phrase,short,full)
     }
-    console.log("function doAutoSave_1"+phrase,short,full)
-    console.log("function doAutoSave_2"+e)
+    //console.log("function doAutoSave_1"+phrase,short,full)
+    //console.log("function doAutoSave_2"+e)
   }
-  console.log("function doAutoSave_3_saveBtns="+saveBtns)
-  console.log("function doAutoSave_4_saveBtns="+saveBtns.length)
+  //console.log("function doAutoSave_3_saveBtns="+saveBtns)
+  //console.log("function doAutoSave_4_saveBtns="+saveBtns.length)
 }
 
 //削除
@@ -883,12 +906,13 @@ function allDelete(){
   for(const e of removeBtns){
     const phrase=e.dataset.phrase
     savedWords=savedWords.filter(item=>item.phrase!==phrase);
-    console.log("function allDelete"+phrase)
+    //console.log("function allDelete"+phrase)
   }
   localStorage.setItem("savedWords", JSON.stringify(savedWords));
   if(showSavedWords){
     renderSavedWords()
-  }  console.log("function allDelete_1")
+  }
+  //console.log("function allDelete_1")
 }
 
 //表示
@@ -911,7 +935,7 @@ function renderSavedWords() {
 
 //非表示
 function hideSavedWords(){
-  console.log("hidesavewords1")
+  //console.log("hidesavewords1")
   container.innerHTML = ""
 }
 
@@ -939,14 +963,14 @@ function autoSaveMode(){
     autoSave=true
     autoSaveBtn.classList.add("autoSaveOn")
     autoSaveBtn.innerHTML="自動保存モード：on"
-    console.log(1)
+    //console.log("1")
   }  else if (autoSave===true){
     autoSave=false
     autoSaveBtn.classList.remove("autoSaveOn")
     autoSaveBtn.innerHTML="自動保存モード：off"
-    console.log(2)
+    //console.log("2")
   }
-  console.log(autoSave)
+  //console.log(autoSave)
 
 }
 
@@ -1023,7 +1047,7 @@ autoSaveBtn.addEventListener("click",autoSaveMode)
 //ラベル
 let labelNameDisplay =""
 let label=localStorage.getItem("label") || "";//以前のラベル読み込み
-console.log("label="+label)
+//console.log("label="+label)
 changeLabelNameDisplay(label)
 changeLabelBtn.innerHTML="ラベル："+labelNameDisplay
 
@@ -1033,7 +1057,7 @@ function changeLabelNameDisplay(newname){//ボタンに表示する用の文字�
   }else{//それ以外はそのまま
     labelNameDisplay=newname
   }
-  console.log("function changeLabelNameDisplay(newname){"+newname)
+  //console.log("function changeLabelNameDisplay(newname){"+newname)
 }
 
 changeLabelBtn.addEventListener("click",function(){
@@ -1043,15 +1067,14 @@ changeLabelBtn.addEventListener("click",function(){
     changeLabelNameDisplay(label)
     changeLabelBtn.innerHTML="ラベル："+labelNameDisplay
     localStorage.setItem("label", label);
-    console.log("changeLabelBtn.addEventListener_1_label="+label+labelNameDisplay)
+    //console.log("changeLabelBtn.addEventListener_1_label="+label+labelNameDisplay)
   }
 })
 
-console.log("test4")
 //全消去ボタンクリック
 allDeleteBtn.addEventListener("click",function(){
   const removeBtns = savedWordsContainer.querySelectorAll(".removeBtn")
-  console.log("allDeleteBtn.addEventListener_1,removeBtns.length="+removeBtns.length)
+  //console.log("allDeleteBtn.addEventListener_1,removeBtns.length="+removeBtns.length)
   if (removeBtns.length!==0){
     if(window.confirm("保存した単語を全て消去します")){
       allDelete()
@@ -1087,7 +1110,7 @@ const Keyboard={
         this.elements.main.appendChild(this.elements.keysContainer)//keysContainer を main の子要素に追加。
         document.body.appendChild(this.elements.main)//完成したキーボードをbodyへ追加。
         document.query
-        console.log("init")
+        //console.log("init")
         document.dispatchEvent(
             new Event("keyboardInitFinished")
         )
@@ -1191,7 +1214,7 @@ const Keyboard={
     },
 
     _triggerEvent(handlerName){
-        console.log("Event triggered"+handlerName)
+        //console.log("Event triggered"+handlerName)
         if(typeof this.eventHandlers[handlerName]=="function"){
             //this.eventHandlers[handlerName](this.properties.value)//保持した入力内容を渡す
             this.eventHandlers[handlerName]()
@@ -1235,7 +1258,7 @@ key--tall
 //キーボード
 keyboardBtn.addEventListener("click",function(){//キーボードボタンでキーボードの表示非表示を選択する
   if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき、これから表示する
-    console.log("keyboardBtn.addEventListener(_1")
+    //console.log("keyboardBtn.addEventListener(_1")
     if(isMobile){searchInput.readOnly=true}
     hideSavedWords()
     showSavedWords=false
@@ -1248,7 +1271,7 @@ keyboardBtn.addEventListener("click",function(){//キーボードボタンでキ
     marginBottom()
     buttonHeight()
   }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){//表示されているとき、非表示にする
-    console.log("keyboardBtn.addEventListener(_2")
+    //console.log("keyboardBtn.addEventListener(_2")
     searchInput.readOnly=false
     renderSavedWords()
     showSavedWords=true
