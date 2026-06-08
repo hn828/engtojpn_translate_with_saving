@@ -121,7 +121,10 @@ function lookupwords(words, m) {
       //accumulatedMeaning = shortedMeaning1 + accumulatedMeaning.replace("="+phrase2,"") 
     }
     while (/^[a-zA-Z]/.test(meaning1)) {   
-      let phrase2 = meaning1.replace(/^([a-zA-Z]+).*/, "$1");
+      let phrase2 = meaning1.replace(/^([a-zA-Z-]+).*/, "$1");//-はy-axisなどのため
+      if (visited.has(phrase2)) {
+        break;
+      }
       visited.add(phrase2);
       meaning1 = dictionary[phrase2] || "参照先の訳が見つかりません";
       let shortedMeaning1=meaning1
@@ -581,12 +584,13 @@ searchInput.addEventListener("click", ()=>{
 //検索欄_入力
 let resultArray=[];
 searchInput.addEventListener("input", ()=>{
-  Keyboard.properties.value=searchInput.value
+  //Keyboard.properties.value=searchInput.value
   runSearch()
 })
 
 
 function runSearch() {
+    console.log("function runSearch() {_1")
     if (!dictionary || !dictionary2) {
       console.log("辞書がまだロードされていません");
       return;
@@ -798,33 +802,36 @@ let autoSave=false
 let showSavedWords=true
 
 //はじめにキーボードを表示するか、保存した単語を表示するか
+
+
+
+
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
 let virtualKeyboardOpen =false
-document.addEventListener(
-  "keyboardInitFinished",
-  function(){
-    if(isMobile){//スマホかタブレットの場合(キーボードができるまで待つ)
-      //console.log("if(isMobile){_1"+navigator.userAgent)
-      showSavedWords=false
-    document.body.style.backgroundColor = "rgb(255, 238, 238)";
-      //document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
-      searchInput.readOnly=true
-      Keyboard.open(searchInput.value,
-        function(currentValue){
-          searchInput.value=currentValue
-          runSearch()
-        }
-      )
-      virtualKeyboardOpen=true
-    }
-  }
-)
-if(!isMobile){//パソコンの場合
-  //console.log("if(isMobile){_2"+navigator.userAgent)
-  //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
-  renderSavedWords()
-}
 
+window.addEventListener("DOMContentLoaded",function(){
+  Keyboard.init();
+  if(isMobile){//スマホかタブレットの場合(キーボードができるまで待つ)
+    showSavedWords=false
+    searchInput.readOnly=true
+    Keyboard.open(
+      function(){
+        runSearch()
+      }
+    )
+    virtualKeyboardOpen=true
+    //console.log("if(isMobile){_1"+navigator.userAgent)
+    //document.body.style.backgroundColor = "rgb(255, 238, 238)";
+    //document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
+  }    
+  if(!isMobile){//パソコンの場合
+    renderSavedWords()
+    //console.log("if(isMobile){_2"+navigator.userAgent)
+    //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
+    }
+  marginBottom()
+  buttonHeight()
+})
 
 
 
@@ -964,6 +971,7 @@ function buttonHeight(){
   });
   
 }
+/*
 document.addEventListener(
   "keyboardInitFinished",
   function(){
@@ -971,6 +979,7 @@ document.addEventListener(
     buttonHeight()
   }
 )
+*/
 //window.addEventListener("resize",marginBottom())  //ウィンドウサイズが変わった時  
 let resizeTimer;
 window.addEventListener("resize", () => {
@@ -1051,20 +1060,194 @@ allDeleteBtn.addEventListener("click",function(){
 });
 
 //キーボード
-keyboardBtn.addEventListener("click",function(){
-  if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき
+const Keyboard={
+    elements:{
+        main: null,
+        keysContainer: null,
+        keys:[]
+    },
+
+    eventHandlers:{
+        oninput:null,
+        onclose:null
+    },
+
+    properties:{
+        value:""
+    },
+
+    init(){//keyboardとkeysを作る
+        this.elements.main=document.createElement("div")
+        this.elements.keysContainer=document.createElement("div")
+
+        this.elements.main.classList.add("keyboard","keyboard--hidden")
+        this.elements.keysContainer.classList.add("keyboard__keys")
+        this.elements.keysContainer.appendChild(this._createKeys())
+
+        this.elements.main.appendChild(this.elements.keysContainer)//keysContainer を main の子要素に追加。
+        document.body.appendChild(this.elements.main)//完成したキーボードをbodyへ追加。
+        document.query
+        console.log("init")
+        document.dispatchEvent(
+            new Event("keyboardInitFinished")
+        )
+    },
+
+    _createKeys(){//_は外部から呼ばないprivateなものという意味。人間向けの説明で、機能的には何も変わらない。
+        const fragment=document.createDocumentFragment();
+        const keyLayout =[
+            "q","w","e","r","t","y","u","i","o","p","backspace",
+            "_halfblank","a","s","d","f","g","h","j","k","l","enter",
+            "_fullblank","z","x","c","v","b","n","m",
+            "space","←","→"
+        ];
+
+        const createIconHTML =(icon_name)=>{
+            return `<i class="material-icons">${icon_name}</i>`
+        }
+
+        keyLayout.forEach(key=>{
+            const keyElement=document.createElement("button")
+            //const insertLineBreak=["backspace","enter","m"].indexOf(key)!==-1
+            
+            keyElement.setAttribute("type","button")
+            keyElement.classList.add("keyboard__key")
+            if (key==="_halfblank"){
+                const spacer1=document.createElement("div")
+                spacer1.style.gridColumn="span 1"
+                fragment.appendChild(spacer1)
+                return
+            }
+            if(key=== "_fullblank"){
+                const spacer2=document.createElement("div")
+                spacer2.style.gridColumn="span 2"
+                fragment.appendChild(spacer2)
+                return
+            }
+            switch(key){
+
+                case "backspace":
+                    keyElement.classList.add("keyboard__key--wide")
+                    keyElement.innerHTML=createIconHTML("backspace")
+                    keyElement.addEventListener("click",()=>{
+                        //this.properties.value=this.properties.value.substring(0,this.properties.value.length-1)
+                        searchInput.value=searchInput.value.substring(0,searchInput.value.length-1)
+                        this._triggerEvent("oninput")
+                    })
+                    break
+                case "enter":
+                    keyElement.classList.add("keyboard__key--mid--wide","keyboard__key--tall")
+                    keyElement.innerHTML=createIconHTML("keyboard_return")
+                    keyElement.addEventListener("click",()=>{
+                        document.dispatchEvent(                            
+                            new Event("enterClicked")
+                        )
+                    })
+                    break
+                case "space":
+                    keyElement.classList.add("keyboard__key--extra-wide")
+                    keyElement.innerHTML=createIconHTML("space_bar")
+                    keyElement.addEventListener("click",()=>{
+                        //this.properties.value+=" "
+                        searchInput.value+=" "
+                        this._triggerEvent("oninput")
+                    })
+                    break
+                case "←":
+                    keyElement.classList.add("keyboard__key--wide")
+                    keyElement.innerHTML=createIconHTML("keyboard_arrow_left")
+                    keyElement.addEventListener("click",()=>{
+                        document.dispatchEvent(                            
+                            new Event("ArrowLeftClicked")
+                        )
+                        this._triggerEvent("oninput")
+                    })
+                    break
+                case "→":
+                    keyElement.classList.add("keyboard__key--wide")
+                    keyElement.innerHTML=createIconHTML("keyboard_arrow_right")
+                    keyElement.addEventListener("click",()=>{
+                        document.dispatchEvent(                            
+                            new Event("ArrowRightClicked")
+                        )
+                        this._triggerEvent("oninput")
+                    })
+                    break
+                default:
+                    keyElement.textContent=key
+                    keyElement.addEventListener("click",()=>{
+                        //this.properties.value+=key
+                        searchInput.value+=key
+                        this._triggerEvent("oninput")
+                    })
+                    break
+            }
+            fragment.appendChild(keyElement)
+            //if(insertLineBreak){
+                //fragment.appendChild(document.createElement("br"))
+            //}
+        })
+        return fragment
+    },
+
+    _triggerEvent(handlerName){
+        console.log("Event triggered"+handlerName)
+        if(typeof this.eventHandlers[handlerName]=="function"){
+            //this.eventHandlers[handlerName](this.properties.value)//保持した入力内容を渡す
+            this.eventHandlers[handlerName]()
+        }
+    },
+
+    open(oninput,onclose){
+          //open(initialValue,oninput,onclose){
+        //this.properties.value=initialValue||"";
+        this.eventHandlers.oninput=oninput;
+        this.eventHandlers.onclose=onclose;
+        this.elements.main.classList.remove("keyboard--hidden")
+    },
+
+    close(){
+        //this.properties.value="";
+        //this.eventHandlers.oninput=oninput;多分引数ないからいらない？
+        //this.eventHandlers.onclose=onclose;
+        this.elements.main.classList.add("keyboard--hidden")        
+    }
+}
+
+/*前のキーボード設定
+keys
+                text-align: center;
+key
+                width:6%;
+                max-width: 90px;
+                vertical-align: top;
+key--wide
+                width: 12%;
+key--extra--wide
+                width: 70%;
+                max-width: 500px;
+key--tall
+                height: 104px;
+
+
+*/
+
+//キーボード
+keyboardBtn.addEventListener("click",function(){//キーボードボタンでキーボードの表示非表示を選択する
+  if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき、これから表示する
     console.log("keyboardBtn.addEventListener(_1")
     if(isMobile){searchInput.readOnly=true}
     hideSavedWords()
     showSavedWords=false
-    Keyboard.open(searchInput.value,
-      function(currentValue){
-        searchInput.value=currentValue
+    Keyboard.open(
+      function(){
         runSearch()
       }
     )
     virtualKeyboardOpen=true
-  }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){//表示されているとき
+    marginBottom()
+    buttonHeight()
+  }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){//表示されているとき、非表示にする
     console.log("keyboardBtn.addEventListener(_2")
     searchInput.readOnly=false
     renderSavedWords()
@@ -1077,7 +1260,6 @@ document.addEventListener(//仮想キーボードの→ボタン
   "ArrowRightClicked",
   function(){
     searchInput.setSelectionRange(searchInput.selectionStart + 1, searchInput.selectionStart + 1);
-    searchInput.focus();
   }
 )
 
@@ -1085,7 +1267,6 @@ document.addEventListener(//仮想キーボードの←ボタン
   "ArrowLeftClicked",
   function(){
     searchInput.setSelectionRange(searchInput.selectionStart -1, searchInput.selectionStart -1);
-    searchInput.focus();
   }
 )
 
@@ -1101,7 +1282,7 @@ document.addEventListener(
       doAutoSave()
     }
     translationText.innerHTML=""
-    Keyboard.properties.value=""
+    //Keyboard.properties.value=""
   }
 )
 
@@ -1115,5 +1296,5 @@ window.addEventListener("error", function(e){
     " line:" + e.lineno
   )
 })
-searchInput.placeholder = "test2"
+//searchInput.placeholder = "test2"
 
