@@ -863,7 +863,12 @@ window.addEventListener("DOMContentLoaded",function(){
 function save(phrase,short,full){
   const exsisting=savedWords.find(item => item.phrase === phrase)
   if(exsisting){
-    exsisting.count++;
+    if (exsisting.label===label){
+      exsisting.count++;
+    }else if (exsisting.label!==label){
+      const count=exsisting.count++
+      savedWords.push({phrase,short,full,count,label})
+    }
   }else{
     const count=1
     savedWords.push({phrase,short,full,count,label})
@@ -874,6 +879,7 @@ function save(phrase,short,full){
     renderSavedWords()
   }
 }
+console.log("test_save1")
 
 //自動保存
 function doAutoSave(){
