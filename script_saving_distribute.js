@@ -1315,16 +1315,18 @@ document.addEventListener(
   }
 )
 
+//バージョン確認
+translationHistory.innerHTML += "ver2.0"+ "<br>"
+
 //ipadデバッグ用
 function debugLog(text){
   translationHistory.innerHTML += text + "<br>";
 }
-
 window.addEventListener("error", function(e){
   debugLog(
-    "message: " + e.message +
-    " | file: " + e.filename +
-    " | line: " + e.lineno +
+    "message: " + e.message + "<br>"+
+    " | file: " + e.filename + "<br>"+
+    " | line: " + e.lineno + "<br>"+
     " | column: " + e.colno
   );
 });
