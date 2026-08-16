@@ -1288,7 +1288,7 @@ keyboardBtn.addEventListener("click",function(){//キーボードボタンでキ
     showSavedWords=true
     Keyboard.close()
     virtualKeyboardOpen=false
-    searchInput.focus()
+    //searchInput.focus()
     debugLog("③ focus実行");
   }
 })
@@ -1323,7 +1323,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-translationHistory.innerHTML += "ver2.0.1"+ "<br>"
+translationHistory.innerHTML += "ver2.0.2"+ "<br>"
 
 //ipadデバッグ用
 function debugLog(text){
