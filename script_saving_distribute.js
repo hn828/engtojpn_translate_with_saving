@@ -600,8 +600,12 @@ document.addEventListener("click",()=>{
 
 //アイパッドで入力欄をタップしたとき元のキーボードで入力させる
 searchInput.addEventListener("pointerdown", ()=>{
+  debugLog("① pointerdown");
+  debugLog("pointerType: " + event.pointerType);
   searchInput.readOnly=false
+  debugLog("② readOnly: " + searchInput.readOnly);
   searchInput.focus()
+  debugLog("③ focus実行");
 })
 
 //検索欄_入力
@@ -1277,12 +1281,15 @@ keyboardBtn.addEventListener("click",function(){//キーボードボタンでキ
     buttonHeight()
   }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){//表示されているとき、非表示にする
     //console.log("keyboardBtn.addEventListener(_2")
+    debugLog("① キーボード非表示");
     searchInput.readOnly=false
+    debugLog("② readOnly: " + searchInput.readOnly);
     renderSavedWords()
     showSavedWords=true
     Keyboard.close()
     virtualKeyboardOpen=false
     searchInput.focus()
+    debugLog("③ focus実行");
   }
 })
 document.addEventListener(//仮想キーボードの→ボタン
@@ -1316,7 +1323,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-translationHistory.innerHTML += "ver2.0"+ "<br>"
+translationHistory.innerHTML += "ver2.0.1"+ "<br>"
 
 //ipadデバッグ用
 function debugLog(text){
