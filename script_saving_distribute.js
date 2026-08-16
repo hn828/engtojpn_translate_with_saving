@@ -558,7 +558,7 @@ function lookupIdiom3(words) {
         newTranslation3.push({
           key: String(translation3[i][0]),
           phrase: newIdiom,
-          meaning: meaningA,
+          meaning: meaningA.replace(/[‘']/g, ""),
         });
       }
     }
@@ -574,7 +574,7 @@ function lookupIdiom3(words) {
       .replace(/[-]/g, " ")
       .toLowerCase()
       .replace(/\s+/g, " "),
-    meaning: a[a.length-2],
+    meaning: a[a.length-2].replace(/[‘']/g, ""),
   }));
   if (newTranslation3.length > 0) {
     return newTranslation3;
@@ -847,17 +847,12 @@ let autoSave=false
 let showSavedWords=true
 
 //はじめにキーボードを表示するか、保存した単語を表示するか
-
-
-
-
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
 const isIPad =/iPad/i.test(navigator.userAgent)
 const isLine =/Line/i.test(navigator.userAgent)
 //debugLog("isIPad="+isIPad)
 //debugLog("isLine="+isLine)
 let virtualKeyboardOpen =false
-
 window.addEventListener("DOMContentLoaded",function(){
   Keyboard.init();
   if(isIPad){//タブレットの場合(キーボードができるまで待つ)
