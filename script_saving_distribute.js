@@ -573,7 +573,7 @@ function lookupIdiom3(words) {
 }
 
 
-
+/*
 //読み込み時フォーカス
 searchInput.focus()
 //キーを押したときフォーカス
@@ -597,6 +597,7 @@ document.addEventListener("click",()=>{
   searchInput.focus()
   }
 })
+*/
 
 //アイパッドで入力欄をタップしたとき元のキーボードで入力させる
 searchInput.addEventListener("pointerdown", ()=>{
@@ -1323,7 +1324,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-translationHistory.innerHTML += "ver2.0.2"+ "<br>"
+translationHistory.innerHTML += "ver2.0.3"+ "<br>"
 
 //ipadデバッグ用
 function debugLog(text){
