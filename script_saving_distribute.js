@@ -1324,7 +1324,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-translationHistory.innerHTML += "ver2.0.3"+ "<br>"
+translationHistory.innerHTML += "ver2.0.4"+ "<br>"
 
 //ipadデバッグ用
 function debugLog(text){
@@ -1340,3 +1340,4 @@ window.addEventListener("error", function(e){
 });
 //searchInput.placeholder = "test2"
 
+debugLog("UserAgent: " + navigator.userAgent);
