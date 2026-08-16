@@ -600,9 +600,11 @@ document.addEventListener("click",()=>{
   }
 })
 
-
 //アイパッドで入力欄をタップしたとき元のキーボードで入力させる
 searchInput.addEventListener("pointerdown", ()=>{
+  if(isLine){//LINEで開くとき、標準キーボードを出すときにウィンドウが小さく変形するのでウィンドウ上のキーボードを閉じる
+    Keyboard.close()
+  }
   debugLog("① pointerdown");
   debugLog("pointerType: " + event.pointerType);
   searchInput.readOnly=false
@@ -838,7 +840,9 @@ let showSavedWords=true
 
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
 const isIPad =/iPad/i.test(navigator.userAgent)
+const isLine =/Line/i.test(navigator.userAgent)
 debugLog("isIPad="+isIPad)
+debugLog("isLine="+isLine)
 let virtualKeyboardOpen =false
 
 window.addEventListener("DOMContentLoaded",function(){
@@ -1328,7 +1332,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-translationHistory.innerHTML += "ver2.0.5"+ "<br>"
+translationHistory.innerHTML += "ver2.0.6"+ "<br>"
 
 //ipadデバッグ用
 function debugLog(text){
