@@ -605,12 +605,12 @@ searchInput.addEventListener("pointerdown", ()=>{
   if(isLine){//LINEで開くとき、標準キーボードを出すときにウィンドウが小さく変形するのでウィンドウ上のキーボードを閉じる
     Keyboard.close()
   }
-  debugLog("① pointerdown");
-  debugLog("pointerType: " + event.pointerType);
+  //debugLog("① pointerdown");
+  //debugLog("pointerType: " + event.pointerType);
   searchInput.readOnly=false
-  debugLog("② readOnly: " + searchInput.readOnly);
+  //debugLog("② readOnly: " + searchInput.readOnly);
   searchInput.focus()
-  debugLog("③ focus実行");
+  //debugLog("③ focus実行");
 })
 
 //検索欄_入力
@@ -841,8 +841,8 @@ let showSavedWords=true
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
 const isIPad =/iPad/i.test(navigator.userAgent)
 const isLine =/Line/i.test(navigator.userAgent)
-debugLog("isIPad="+isIPad)
-debugLog("isLine="+isLine)
+//debugLog("isIPad="+isIPad)
+//debugLog("isLine="+isLine)
 let virtualKeyboardOpen =false
 
 window.addEventListener("DOMContentLoaded",function(){
@@ -1290,15 +1290,15 @@ keyboardBtn.addEventListener("click",function(){//キーボードボタンでキ
     buttonHeight()
   }else if(!Keyboard.elements.main.classList.contains("keyboard--hidden")){//表示されているとき、非表示にする
     //console.log("keyboardBtn.addEventListener(_2")
-    debugLog("① キーボード非表示");
+    //debugLog("① キーボード非表示");
     searchInput.readOnly=false
-    debugLog("② readOnly: " + searchInput.readOnly);
+    //debugLog("② readOnly: " + searchInput.readOnly);
     renderSavedWords()
     showSavedWords=true
     Keyboard.close()
     virtualKeyboardOpen=false
     //searchInput.focus()
-    debugLog("③ focus実行");
+    //debugLog("③ focus実行");
   }
 })
 
@@ -1333,7 +1333,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-translationHistory.innerHTML += "ver2.0.6"+ "<br>"
+//translationHistory.innerHTML += "ver2.0.6"+ "<br>"
 
 //ipadデバッグ用
 function debugLog(text){
@@ -1349,4 +1349,4 @@ window.addEventListener("error", function(e){
 });
 //searchInput.placeholder = "test2"
 
-debugLog("UserAgent: " + navigator.userAgent);
+//debugLog("UserAgent: " + navigator.userAgent);
