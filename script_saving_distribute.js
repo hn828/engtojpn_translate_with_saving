@@ -297,6 +297,19 @@ function lookupIdiom(words) {
           return res;
         }
       }
+      if (m === 1 && phrase.endsWith("ness")) {
+        //ness(kindness等形容詞の名詞化)消去
+        let original = phrase.replace(/ness$/, "");
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+        original = phrase.replace(/iness$/, "y");//hapiness
+        res = lookupwords([original], 1);
+        if (res) {
+          return res;
+        }
+      }
     }
   }
   return {
