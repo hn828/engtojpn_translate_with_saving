@@ -590,7 +590,7 @@ document.addEventListener("keyup",(e)=>{
     searchInput.focus();
   }
 })
-//クリックしたときフォーカス
+//クリックしたときフォーカス（PCの場合のみ）
 document.addEventListener("click",()=>{
   if(!isMobile){
     const selection=window.getSelection()
@@ -780,10 +780,10 @@ searchInput.addEventListener("keydown", (e) => {
       }
     }
   }
-
+/*
   //下矢印　全開け
   if(e.key==="ArrowDown"){
-    e.preventDefault()
+    //e.preventDefault()
     if (translationText.innerHTML!==""){
       const details = translationText.querySelectorAll("details");
       for(const e of [...details]){
@@ -800,7 +800,7 @@ searchInput.addEventListener("keydown", (e) => {
       }
     }
   }
-
+*/
   //Shift+Enter　自動保存モード    
   if(e.shiftKey && e.key === "Enter"){
     autoSaveMode()
@@ -1301,6 +1301,7 @@ keyboardBtn.addEventListener("click",function(){//キーボードボタンでキ
     debugLog("③ focus実行");
   }
 })
+
 document.addEventListener(//仮想キーボードの→ボタン
   "ArrowRightClicked",
   function(){
