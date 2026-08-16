@@ -573,7 +573,7 @@ function lookupIdiom3(words) {
 }
 
 
-/*
+
 //読み込み時フォーカス
 searchInput.focus()
 //キーを押したときフォーカス
@@ -592,12 +592,14 @@ document.addEventListener("keyup",(e)=>{
 })
 //クリックしたときフォーカス
 document.addEventListener("click",()=>{
-  const selection=window.getSelection()
-  if(!selection||selection.toString().length===0){
-  searchInput.focus()
+  if(!isMobile){
+    const selection=window.getSelection()
+    if(!selection||selection.toString().length===0){
+      searchInput.focus()
+    }
   }
 })
-*/
+
 
 //アイパッドで入力欄をタップしたとき元のキーボードで入力させる
 searchInput.addEventListener("pointerdown", ()=>{
@@ -835,11 +837,13 @@ let showSavedWords=true
 
 
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
+const isIPad =/iPad/i.test(navigator.userAgent)
+debugLog("isIPad="+isIPad)
 let virtualKeyboardOpen =false
 
 window.addEventListener("DOMContentLoaded",function(){
   Keyboard.init();
-  if(isMobile){//スマホかタブレットの場合(キーボードができるまで待つ)
+  if(isIPad){//タブレットの場合(キーボードができるまで待つ)
     showSavedWords=false
     searchInput.readOnly=true
     Keyboard.open(
@@ -852,7 +856,7 @@ window.addEventListener("DOMContentLoaded",function(){
     //document.body.style.backgroundColor = "rgb(255, 238, 238)";
     //document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
   }    
-  if(!isMobile){//パソコンの場合
+  if(!isIPad){//スマホかパソコンの場合
     renderSavedWords()
     //console.log("if(isMobile){_2"+navigator.userAgent)
     //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
@@ -1269,7 +1273,7 @@ key--tall
 keyboardBtn.addEventListener("click",function(){//キーボードボタンでキーボードの表示非表示を選択する
   if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき、これから表示する
     //console.log("keyboardBtn.addEventListener(_1")
-    if(isMobile){searchInput.readOnly=true}
+    if(isIPad){searchInput.readOnly=true}
     hideSavedWords()
     showSavedWords=false
     Keyboard.open(
@@ -1324,7 +1328,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-translationHistory.innerHTML += "ver2.0.4"+ "<br>"
+translationHistory.innerHTML += "ver2.0.5"+ "<br>"
 
 //ipadデバッグ用
 function debugLog(text){
