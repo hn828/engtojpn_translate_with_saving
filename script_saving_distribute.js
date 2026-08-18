@@ -96,49 +96,55 @@ function matchNested(str,pre,post) {
 //m語の長さの語句検索
 function lookupwords(words, m) {
   let phrase = "";
+  let phrase2="";
   let visited = new Set();
   phrase = words.slice(0, m).join(" ");
   if (dictionary[phrase]) {
     let meaning1 = dictionary[phrase];
-    let accumulatedMeaning = meaning1; //amir=emirなどほかに飛ばされるときの処理
+    //let accumulatedMeaning = meaning1; //amir=emirなどほかに飛ばされるときの処理
+    let referencedMeaning=""
     //visited.add(phrase);
     while (meaning1.startsWith("=")) {
       //let phrase2 = meaning1.replace(/^\s*=\s*/, "");
-      let phrase2 = meaning1.replace(/^=([a-zA-Z]+).*/, "$1");//=wonderful / はなはだ,著しくでwonderfulを残す
+      phrase2 = meaning1.replace(/^=([a-zA-Z]+).*/, "$1");//wondrous=wonderful / はなはだ,著しくでwonderfulを残す
       //console.log("lookupwords_meaning1=",meaning1)
       //console.log("lookupwords_phrase2=",phrase2)
       if (visited.has(phrase2)) {
         break;
       }
       visited.add(phrase2);
-      meaning1 = dictionary[phrase2] || "参照先の訳が見つかりません";
-      let shortedMeaning1=meaning1
-      shortedMeaning1 = getShortMeaning(meaning1)
-      if (commonWords.includes(phrase2)){
-        shortedMeaning1=getveryShortMeaning(meaning1)
-      }
-      accumulatedMeaning = accumulatedMeaning+ "  ※" + phrase2 + "→" +  shortedMeaning1;
+      referencedMeaning= dictionary[phrase2] || "参照先の訳が見つかりません";
+      //let shortedMeaning1=meaning1
+      //shortedMeaning1 = getShortMeaning(meaning1)
+      //if (commonWords.includes(phrase2)){
+      //  shortedMeaning1=getveryShortMeaning(meaning1)
+      //}
+      //accumulatedMeaning = accumulatedMeaning+ "  ※" + phrase2 + "→" +  shortedMeaning1;
+      //referencedMeaning=  phrase2 + "→" +  referencedMeaning;
       //accumulatedMeaning = shortedMeaning1 + accumulatedMeaning.replace("="+phrase2,"") 
     }
     while (/^[a-zA-Z]/.test(meaning1)) {   
-      let phrase2 = meaning1.replace(/^([a-zA-Z-]+).*/, "$1");//-はy-axisなどのため
+      phrase2 = meaning1.replace(/^([a-zA-Z-]+).*/, "$1");//-はy-axisなどのため
       if (visited.has(phrase2)) {
         break;
       }
       visited.add(phrase2);
-      meaning1 = dictionary[phrase2] || "参照先の訳が見つかりません";
-      let shortedMeaning1=meaning1
-      shortedMeaning1 = getShortMeaning(meaning1)
-      if (commonWords.includes(phrase2)){
-        shortedMeaning1=getveryShortMeaning(meaning1)
-      }
-      accumulatedMeaning = accumulatedMeaning+ "  ※" + phrase2 + "→" +  shortedMeaning1;
+      referencedMeaning = dictionary[phrase2] || "参照先の訳が見つかりません";
+      //let shortedMeaning1=meaning1
+      //shortedMeaning1 = getShortMeaning(meaning1)
+      //if (commonWords.includes(phrase2)){
+      //  shortedMeaning1=getveryShortMeaning(meaning1)
+      //}
+      //accumulatedMeaning = accumulatedMeaning+ "  ※" + phrase2 + "→" +  shortedMeaning1;
+      //referencedMeaning = phrase2 + "→" +  referencedMeaning;
     }
     let key = words.slice(0, 1).join(); //配列から文字列にしている
     return {
       key: key,
       phrase: phrase,
-      meaning: accumulatedMeaning,
+      meaning: meaning1,
+      referencedPhrase: phrase2,
+      referencedMeaning: referencedMeaning,
       length_m: phrase.split(" ").length,
     };
   }
@@ -316,11 +322,13 @@ function lookupIdiom(words) {
     key: phrase,
     phrase: phrase,
     meaning: "訳が見つかりません",
+    referencedPhrase:"",
+    referencedMeaning:"",
     length_m: 1,
   };
 }
 
-//イディオム検索２（長文を上記のイディオム検索に渡す）
+//イディオム検索２（長文を3語ずつ上記のイディオム検索に渡す）
 function lookupIdiom2(words) {
   let translation = [];
   let i = 0;
@@ -333,6 +341,8 @@ function lookupIdiom2(words) {
       key: result1.key,
       phrase: result1.phrase,
       meaning: result1.meaning,
+      referencedPhrase:result1.referencedPhrase,
+      referencedMeaning:result1.referencedMeaning,
     });
     i = i + result1.length_m;
   }
@@ -650,27 +660,33 @@ function runSearch() {
 
     let result2 = lookupIdiom2(words);
     resultArray = result2.map((result2Item) => {
-      let [key, phrase, meaning] = [
+      let [key, phrase, meaning,referencedPhrase,referencedMeaning] = [
         result2Item.key,
         result2Item.phrase,
         result2Item.meaning,
+        result2Item.referencedPhrase,
+        result2Item.referencedMeaning,
       ];
       let shortMeaning = getShortMeaning(meaning);
       let veryShortMeaning=""
+      let shortReferencedMeaning=getShortMeaning(referencedMeaning)
       if (commonWords.includes(result2Item.phrase)){
         veryShortMeaning=getveryShortMeaning(meaning)
       }
       return {
         key: key,
         phrase: phrase,
-        veryShortMeaning:veryShortMeaning,
         shortMeaning: shortMeaning,
+        veryShortMeaning:veryShortMeaning,
+        shortReferencedMeaning:shortReferencedMeaning,
         fullMeaning: meaning,
+        referencedPhrase:referencedPhrase,
+        referencedMeaning:referencedMeaning,
       };
     });
     //console.log("searchInput_resultArray=", structuredClone(resultArray));
 
-    let result3 = lookupIdiom3(words);
+    let result3 = lookupIdiom3(words);//解説内のイディオム 《go on 名》等
     resultArray = resultArray.map((i) => {
       let newMeaning = i.shortMeaning || "";
       let VeryShortMeaningAdd=""
@@ -698,8 +714,19 @@ function runSearch() {
     //translationContainer.style.display = "flex";
     let translatedHTML=resultArray.map((i,index) => {
     const phrase=i.phrase
-    const short = i.veryShortMeaning ? i.veryShortMeaning + i.veryShortMeaningAdd : i.shortMeaning;
-    const full = i.fullMeaning;
+    //const short = i.veryShortMeaning ? i.veryShortMeaning + i.veryShortMeaningAdd : i.shortMeaning;
+    let short=i.shortMeaning
+    if(i.veryShortMeaning){
+      short=i.veryShortMeaning
+    }
+    if(i.shortReferencedMeaning){
+      short=short+ "　※" + i.referencedPhrase + "→" + i.shortReferencedMeaning
+    }
+    short+=i.veryShortMeaningAdd
+    let full =i.fullMeaning
+    if(i.referencedMeaning){
+      full += "　※"+ i.referencedPhrase + "→"+i.referencedMeaning;
+    }
     return `
       <div class="word-block">
         <details>
@@ -1341,7 +1368,8 @@ document.addEventListener(
 )
 
 //バージョン確認
-//translationHistory.innerHTML += "ver2.0.6"+ "<br>"
+let version="ver2.1.0"
+//translationHistory.innerHTML +=version + "<br>"
 
 //ipadデバッグ用
 function debugLog(text){
@@ -1352,7 +1380,8 @@ window.addEventListener("error", function(e){
     "message: " + e.message + "<br>"+
     " | file: " + e.filename + "<br>"+
     " | line: " + e.lineno + "<br>"+
-    " | column: " + e.colno
+    " | column: " + e.colno+"<br>"+
+    " | ver:"+version+"<br>"
   );
 });
 //searchInput.placeholder = "test2"
