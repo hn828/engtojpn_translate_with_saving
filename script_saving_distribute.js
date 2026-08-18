@@ -595,7 +595,242 @@ function lookupIdiom3(words) {
     //: translation3; 
 }
 
+//以下単位変換機能
+const units=[
+  "inch", "inches","in",
+  "foot", "feet", "ft",
+  "rod", "rods", "pole", "poles", "perch", "perches",
+  "yard", "yards", "yd",
+  "mile", "miles", "mi",
+  "chain","chains",
+  "ounce", "ounces", "oz",
+  "stone", "stones", "st",
+  "gallon", "gallons", "gal",
+  "quart", "quarts", "qt",
+  "pint", "pints", "pt",
+  "peck", "pecks",
+  "bushel", "bushels", "bu",
+  "cup", "cups",
+  "acre", "acres",
+  "mph","m.p.h",
+  "fahrenheit", "°f",
+  "quarter", "quarters",
+  "dime", "dimes",
+  "nickel", "nickels",
+  "cent", "cents", "pennies",
+  "pound", "pounds","￡",
+  "lb", "lbs",
+  "crown", "crowns",
+  "half-crown", "half-crowns",
+  "shilling", "shillings",
+  "penny",
+  "pence",
+  "farthing", "farthings"
+]
+function findUnitConversions(words){
+  let conversions=[];
+  for(let i=0;i<words.length-1;i++){
+    const unit=words[i]
+    if(!units.includes(unit))continue//i語目が単位でなければ次の単語へ進む
+    if(i===0)continue//1語目は前に数字がつき得ないので次の単語へ進む
+    const value = Number(words[i-1])//i-1語目を文字列から数字に変換する
+    if (isNaN(value)) continue//数字にならない文字列なら次の単語に進む
+    conversions.push({//数字＋単位ならconversionsに送る
+      value:value,
+      unit:unit,
+      i:i
+    })
+  }
+  return conversions
+}
+function Convert(v,u,i){
+  //長さ
+  if(["inch", "inches","in"].includes(u)){
+    return[
+      `約${(v*2.54).toFixed(1)}cm`,
+      `12分の${v}feet`
+    ]
+  }
+  if(["foot", "feet", "ft"].includes(u)){
+    return[
+      `約${(v*30.48).toFixed(1)}cm`,
+      `${v*12}inches`
+    ]
+  }
+  if (["rod", "rods", "pole", "poles", "perch", "perches"].includes(u)) {
+  return [`${(v * 5.03).toFixed(1)}m,2分の${v}yards`]
+  }
+  if(["yard", "yards", "yd"].includes(u)){
+    return[
+      `約${(v*0.9144).toFixed(2)}m`,
+      `${v*3}feet`
+    ]
+  }
+  if(["mile", "miles", "mi"].includes(u)){
+    return[
+      `陸上で約${(v*1.609).toFixed(1)}km`,
+      `海里で約${(v*1.852).toFixed(1)}km`,
+      `${v*1760}yards`
+    ]
+  }
+  if(["chain","chains"].includes(u)){
+    return[
+      `約${(v*20.11).toFixed(1)}m`,//辞書の方が誤記？？
+      `${v*22}yards`
+    ]
+  }
+  //重さ、オンスは液量も
+  if([ "ounce", "ounces", "oz"].includes(u)){
+    return[
+      `常衡で約${(v*28.349).toFixed(1)}g`,
+      `貴金属、薬品で約${(v*31.103).toFixed(1)}g`,
+      `《米》約${(v*29.573).toFixed(1)}mL`,
+      `《英》約${(v*28.413).toFixed(1)}mL`,
+    ]
+  }
+  if (["stone", "stones", "st"].includes(u)) {
+    return [
+      `約${(v * 6.35029).toFixed(1)}kg`,
+      `${v*14}pounds`
+    ]
+  }
+  //液量
+  if (["bushel", "bushels", "bu"].includes(u)) {
+    return [
+      `《米》穀物で約${(v * 35.239).toFixed(1)}L`,
+      `《英》穀物で約${(v * 36.368).toFixed(1)}L`,
+      `${v*8}gallons`
+    ]
+  }
+  if([ "gallon", "gallons", "gal"].includes(u)){
+    return[
+      `《米》液体で約${(v*3.7853).toFixed(1)}L`,
+      `《米》穀物で約${(v*4.405).toFixed(1)}L`,
+      `《英》約${(v*4.546).toFixed(1)}L`,
+      `${v*4}quarts,${v*8}pints,${v*128}fluid ounces`
+    ]
+  }
+  if(["quart", "quarts", "qt"].includes(u)){
+    return[
+      `《米》液体で約${(v*0.946).toFixed(1)}L`,
+      `《米》穀物で約${(v*1.101).toFixed(1)}L`,
+      `《英》約${(v*1.136).toFixed(1)}L`,
+      `4分の${v}gallon,2分の${v}pints`
+    ]
+  }
+  if(["pint", "pints", "pt"].includes(u)){
+    return[
+      `《米》液体で約${(v*0.473).toFixed(2)}L`,
+      `《米》穀物で約${(v*0.550).toFixed(2)}L`,
+      `《英》約${(v*0.568).toFixed(2)}L`,
+      `8分の${v}gallon,${v*2}quarts`
+    ]
+  }
+  if (["peck", "pecks"].includes(u)) {
+    return [
+      `約${(v * 8.80977).toFixed(1)}L`
+    ]
+  }
+  if(["cup", "cups"].includes(u)){
+    return[
+      `《米》約${(v*240).toFixed(0)}mL`,
+    ]
+  }
+  if(["acre", "acres","ac"].includes(u)){//エーカー
+    return[
+      `約${(v*4.047).toFixed(1)}m²`,
+    ]
+  }
+  /*
+  if(["are","ares","a"].includes(u)){
+    return[
+      `${(v*100)}m²`
+    ]
+  }
+  if(["hectare","hectares","ha"].includes(u)){
+    return[
+      `${(v*10000)}m²`
+    ]
+  }
+  */
+//速度
+  if (["mph","m.p.h"].includes(u)) {
+    return `約${(v * 1.609344).toFixed(1)}km/h`;
+  }
+//温度
+  if(["fahrenheit", "°f"].includes(u)){
+    return[
+      `${((v - 32) * 5 / 9).toFixed(1)}°C`
+    ]
+  }
+  //通貨
+  //アメリカドル＄
+  if (["quarter", "quarters"].includes(u)) {
+    return [
+      `${v*25}cents,4分の${v}dollar`
+    ];
+  }
+  if (["dime", "dimes"].includes(u)) {
+    return [
+      `${v*10}cents,10分の${v}dollar`
+    ];
+  }
+  if (["nickel", "nickels"].includes(u)) {
+    return [
+      `${v*5}cents,20分の${v}dollar`
+    ];
+  }
+  if (["cent", "cents", "pennies"].includes(u)) {
+    return [
+      `100分の${v}dollar`
+    ];
+  }
+  //イギリスポンド￡
+  if(["pound", "pounds", "￡"].includes(u)){
+    return[
+      `約${(v*0.4535).toFixed(2)}kg`,
+      `貨幣で${v*20}shillings(=${v*240}pence);1971年2月以後は${v*100}pence`
+    ]
+  }
+    if([ "lb", "lbs"].includes(u)){
+    return[
+      `約${(v*0.4535).toFixed(2)}kg`,
+    ]
+  }
+  if (["crown", "crowns"].includes(u)) {
+    return [
+      `4分の${v}pounds`
+    ];
+  }
+  if (["half-crown", "half-crowns"].includes(u)) {
+    return [
+      `8分の${v}pounds`
+    ];
+  }
+  if (["shilling", "shillings"].includes(u)) {
+    return [
+      `20分の${v}pounds`
+    ];
+  }
+  if (["penny"].includes(u)) {
+    return[
+      `《英》240分の${v}pounds,12分の${v}shillings;1971年2月以後は100分の${v}pounds`,
+      `《米》100分の${v}dollar`
+    ]
+  }
+  if (["pence"].includes(u)) {
+    return [
+      `240分の${v}pounds,12分の${v}shillings;1971年2月以後は100分の${v}pounds`
+    ];
+  }
+  if (["farthing", "farthings"].includes(u)) {
+    return [
+      `960分の${v}pounds,4分の${v}pence`
+    ];
+  }
 
+}
+//以上単位変換機能
 
 //読み込み時フォーカス
 searchInput.focus()
