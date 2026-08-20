@@ -942,6 +942,9 @@ function runSearch() {
       if (commonWords.includes(result2Item.phrase)){
         veryShortMeaning=getveryShortMeaning(meaning)
       }
+      if(commonWords.includes(result2Item.referencedPhrase)){
+        shortReferencedMeaning=getveryShortMeaning(referencedMeaning)
+      }
       return {
         key: key,
         phrase: phrase,
@@ -960,7 +963,9 @@ function runSearch() {
     for (let q = 0; q < resultArray.length; q++) {
       if(resultArray[q].shortReferencedMeaning){
         resultArray[q].shortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
-        resultArray[q].veryShortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
+        if (resultArray[q].veryShortMeaning) {
+          resultArray[q].veryShortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
+        }
       }
       if(resultArray[q].referencedMeaning){
         resultArray[q].fullMeaning += "<br>※"+ resultArray[q].referencedPhrase + "→"+resultArray[q].referencedMeaning;
@@ -977,7 +982,9 @@ function runSearch() {
           //console.log("here")
           let extraMeaning = "《" + result3[q].phrase + "》" + result3[q].meaning
           resultArray[p].shortMeaning=resultArray[p].shortMeaning+"<br>"+extraMeaning
-          resultArray[p].veryShortMeaning=resultArray[p].veryShortMeaning+"<br>"+extraMeaning
+          if (resultArray[p].veryShortMeaning) {
+            resultArray[p].veryShortMeaning=resultArray[p].veryShortMeaning+"<br>"+extraMeaning
+          }
           P=p+1
           break
         }
