@@ -142,6 +142,7 @@ function lookupwords(words, m) {
     return {
       key: key,
       phrase: phrase,
+      phrase0:phrase,//lookupIdiomで語尾を消去したとき、消去する前の元の単語を入れる用
       meaning: meaning1,
       referencedPhrase: phrase2,
       referencedMeaning: referencedMeaning,
@@ -162,6 +163,7 @@ function lookupIdiom(words) {
         let original = phrase.replace(/s$/, "");
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         if (phrase.endsWith("ies")) {
@@ -172,6 +174,7 @@ function lookupIdiom(words) {
         }
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
       }
@@ -180,6 +183,7 @@ function lookupIdiom(words) {
         let original2 = phrase.replace(/ed$/, "");
         res = lookupwords([original2], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         if (phrase.endsWith("ied")) {
@@ -199,11 +203,13 @@ function lookupIdiom(words) {
         }
         res = lookupwords([original2], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original2 = phrase.replace(/d$/, "");//generated
         res = lookupwords([original2], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
       }
@@ -212,6 +218,7 @@ function lookupIdiom(words) {
         let original3 = phrase.replace(/ing$/, "");
         res = lookupwords([original3], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         if (phrase.endsWith("ying")) {
@@ -222,11 +229,13 @@ function lookupIdiom(words) {
         }
         res = lookupwords([original3], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original3 = phrase.replace(/(ing)$/, "e");
         res = lookupwords([original3], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
       }
@@ -235,11 +244,13 @@ function lookupIdiom(words) {
         let original4 = phrase.replace(/est$/, "");
         res = lookupwords([original4], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original4 = phrase.replace(/st$/, "");
         res = lookupwords([original4], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         if (/([bcdfghjklmnpqrstvwxyz])\1est$/.test(phrase)) {
@@ -247,11 +258,13 @@ function lookupIdiom(words) {
         }
         res = lookupwords([original4], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original4 = phrase.replace(/iest$/, "y");
         res = lookupwords([original4], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
       }
@@ -260,11 +273,13 @@ function lookupIdiom(words) {
         let original = phrase.replace(/er$/, "");
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original = phrase.replace(/r$/, "");
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         if (/([bcdfghjklmnpqrstvwxyz])\1er$/.test(phrase)) {
@@ -272,11 +287,13 @@ function lookupIdiom(words) {
         }
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original = phrase.replace(/iest$/, "y");
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
       }
@@ -285,21 +302,25 @@ function lookupIdiom(words) {
         let original = phrase.replace(/ly$/, "");
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original = phrase.replace(/ally$/, "");//basically
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original = phrase.replace(/ily$/, "y");//happily
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original = phrase.replace(/ly$/, "le");//gently
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
       }
@@ -308,11 +329,13 @@ function lookupIdiom(words) {
         let original = phrase.replace(/ness$/, "");
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
         original = phrase.replace(/iness$/, "y");//hapiness
         res = lookupwords([original], 1);
         if (res) {
+          res.phrase0=phrase
           return res;
         }
       }
@@ -321,6 +344,7 @@ function lookupIdiom(words) {
   return {
     key: phrase,
     phrase: phrase,
+    phrase0: phrase,
     meaning: "訳が見つかりません",
     referencedPhrase:"",
     referencedMeaning:"",
@@ -340,6 +364,7 @@ function lookupIdiom2(words) {
     translation.push({
       key: result1.key,
       phrase: result1.phrase,
+      phrase0: result1.phrase0,
       meaning: result1.meaning,
       referencedPhrase:result1.referencedPhrase,
       referencedMeaning:result1.referencedMeaning,
@@ -632,13 +657,13 @@ function Convert(v,u){
   if(["inch", "inches","in"].includes(u)){
     return[
       `約${(v*2.54).toFixed(1)}cm`,
-      `12分の${v}feet`
+      `=12分の${v}feet`
     ]
   }
   if(["foot", "feet", "ft"].includes(u)){
     return[
       `約${(v*30.48).toFixed(1)}cm`,
-      `${v*12}inches`
+      `=${v*12}inches`
     ]
   }
   if (["rod", "rods", "pole", "poles", "perch", "perches"].includes(u)) {
@@ -647,67 +672,67 @@ function Convert(v,u){
   if(["yard", "yards", "yd"].includes(u)){
     return[
       `約${(v*0.9144).toFixed(2)}m`,
-      `${v*3}feet`
+      `=${v*3}feet`
     ]
   }
   if(["mile", "miles", "mi"].includes(u)){
     return[
-      `陸上で約${(v*1.609).toFixed(1)}km`,
-      `海里で約${(v*1.852).toFixed(1)}km`,
-      `${v*1760}yards`
+      `約${(v*1.609).toFixed(1)}km(陸上)`,
+      `約${(v*1.852).toFixed(1)}km(海里)`,
+      `=${v*1760}yards`
     ]
   }
   if(["chain","chains"].includes(u)){
     return[
       `約${(v*20.11).toFixed(1)}m`,//辞書の方が誤記？？
-      `${v*22}yards`
+      `=${v*22}yards`
     ]
   }
   //重さ、オンスは液量も
   if([ "ounce", "ounces", "oz"].includes(u)){
     return[
-      `常衡で約${(v*28.349).toFixed(1)}g`,
-      `貴金属・薬品で約${(v*31.103).toFixed(1)}g`,
-      `《米》約${(v*29.573).toFixed(1)}mL`,
-      `《英》約${(v*28.413).toFixed(1)}mL`,
+      `約${(v*28.349).toFixed(1)}g （常衡）`,
+      `約${(v*31.103).toFixed(1)}g （貴金属・薬品）`,
+      `約${(v*29.573).toFixed(1)}mL 《米》`,
+      `約${(v*28.413).toFixed(1)}mL 《英》`,
     ]
   }
   if (["stone", "stones", "st"].includes(u)) {
     return [
       `約${(v * 6.35029).toFixed(1)}kg`,
-      `${v*14}pounds`
+      `=${v*14}pounds`
     ]
   }
   //液量
   if (["bushel", "bushels", "bu"].includes(u)) {
     return [
-      `《米》穀物で約${(v * 35.239).toFixed(1)}L`,
-      `《英》穀物で約${(v * 36.368).toFixed(1)}L`,
-      `${v*8}gallons`
+      `約${(v * 35.239).toFixed(1)}L（《米》穀物）`,
+      `約${(v * 36.368).toFixed(1)}L（《英》穀物）`,
+      `=${v*8}gallons`
     ]
   }
   if([ "gallon", "gallons", "gal"].includes(u)){
     return[
-      `《米》液体で約${(v*3.7853).toFixed(1)}L`,
-      `《米》穀物で約${(v*4.405).toFixed(1)}L`,
-      `《英》約${(v*4.546).toFixed(1)}L`,
-      `=${v*4}quarts,${v*8}pints,${v*128}fluid ounces`
+      `約${(v*3.7853).toFixed(1)}L（《米》液体）`,
+      `約${(v*4.405).toFixed(1)}L（《米》穀物）`,
+      `約${(v*4.546).toFixed(1)}L（《英》）`,
+      `=${v*4} quarts, ${v*8} pints, ${v*128} fluid ounces`
     ]
   }
   if(["quart", "quarts", "qt"].includes(u)){
     return[
-      `《米》液体で約${(v*0.946).toFixed(1)}L`,
-      `《米》穀物で約${(v*1.101).toFixed(1)}L`,
-      `《英》約${(v*1.136).toFixed(1)}L`,
-      `4分の${v}gallon,2分の${v}pints`
+      `約${(v*0.946).toFixed(2)}L（《米》液体）`,
+      `約${(v*1.101).toFixed(2)}L（《米》穀物）`,
+      `約${(v*1.136).toFixed(2)}L（《英》）`,
+      `=4分の${v} gallon, 2分の${v} pints`
     ]
   }
   if(["pint", "pints", "pt"].includes(u)){
     return[
-      `《米》液体で約${(v*0.473).toFixed(2)}L`,
-      `《米》穀物で約${(v*0.550).toFixed(2)}L`,
-      `《英》約${(v*0.568).toFixed(2)}L`,
-      `8分の${v}gallon,${v*2}quarts`
+      `約${(v*0.473).toFixed(2)}L（《米》液体）`,
+      `約${(v*0.550).toFixed(2)}L（《米》穀物）`,
+      `約${(v*0.568).toFixed(2)}L（《英》）`,
+      `=8分の${v} gallon, ${v*2} quarts`
     ]
   }
   if (["peck", "pecks"].includes(u)) {
@@ -717,7 +742,7 @@ function Convert(v,u){
   }
   if(["cup", "cups"].includes(u)){
     return[
-      `《米》約${(v*240).toFixed(0)}mL`,
+      `約${(v*240).toFixed(0)}mL（《米》）`,
     ]
   }
   if(["acre", "acres","ac"].includes(u)){//エーカー
@@ -740,7 +765,7 @@ function Convert(v,u){
 //速度
   if (["mph","m.p.h"].includes(u)) {
     return [`
-      約${(v * 1.609344).toFixed(1)}km/h`
+      約${(v * 1.609344).toFixed(2)}km/h`
     ]
   }
 //温度
@@ -753,30 +778,31 @@ function Convert(v,u){
   //アメリカドル＄
   if (["quarter", "quarters"].includes(u)) {
     return [
-      `${v*25}cents,4分の${v}dollar`
+      `=${v*25} cents, 4分の${v} dollar`
     ];
   }
   if (["dime", "dimes"].includes(u)) {
     return [
-      `${v*10}cents,10分の${v}dollar`
+      `=${v*10} cents, 10分の${v} dollar`
     ];
   }
   if (["nickel", "nickels"].includes(u)) {
     return [
-      `${v*5}cents,20分の${v}dollar`
+      `=${v*5} cents, 20分の${v} dollar`
     ];
   }
   if (["cent", "cents", "pennies"].includes(u)) {
     return [
-      `100分の${v}dollar`
+      `100分の${v} dollar`
     ];
   }
   //イギリスポンド￡
   if(["pound", "pounds", "￡"].includes(u)){
+    console.log("here2")
     return[
       `約${(v*0.4535).toFixed(2)}kg`,
-      `貨幣で${v*20}shillings(=${v*240}pence);1971年2月以後は${v*100}pence`
-    ]
+      `貨幣で${v*20} shillings(=${v*240} pence);1971年2月以後は${v*100} pence`
+    ];
   }
     if([ "lb", "lbs"].includes(u)){
     return[
@@ -902,9 +928,10 @@ function runSearch() {
       .split(" "); //配列に戻す
     let result2 = lookupIdiom2(words);
     resultArray = result2.map((result2Item) => {
-      let [key, phrase, meaning,referencedPhrase,referencedMeaning] = [
+      let [key, phrase,phrase0, meaning,referencedPhrase,referencedMeaning] = [
         result2Item.key,
         result2Item.phrase,
+        result2Item.phrase0,
         result2Item.meaning,
         result2Item.referencedPhrase,
         result2Item.referencedMeaning,
@@ -918,6 +945,7 @@ function runSearch() {
       return {
         key: key,
         phrase: phrase,
+        phrase0 : phrase0,
         shortMeaning: shortMeaning,
         veryShortMeaning:veryShortMeaning,
         shortReferencedMeaning:shortReferencedMeaning,
@@ -928,7 +956,35 @@ function runSearch() {
     });
     //console.log("searchInput_resultArray=", structuredClone(resultArray));
 
-    let result3 = lookupIdiom3(words);//解説内のイディオム 《go on 名》等
+
+    for (let q = 0; q < resultArray.length; q++) {
+      if(resultArray[q].shortReferencedMeaning){
+        resultArray[q].shortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
+        resultArray[q].veryShortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
+      }
+      if(resultArray[q].referencedMeaning){
+        resultArray[q].fullMeaning += "<br>※"+ resultArray[q].referencedPhrase + "→"+resultArray[q].referencedMeaning;
+      }
+    }
+
+    let result3 = lookupIdiom3(words);//解説内のイディオム 《go on 名》等  goes onは無理かも
+    let P=0
+    for (let q = 0; q < result3.length; q++) {
+      //console.log("q:"+q+"result3[q]:"+result3[q].key+result3[q].phrase+result3[q].meaning)
+      for (p=P ;p<resultArray.length;p++){
+        //console.log("i:"+i+"resultArray[i].phrase0:"+resultArray[i].phrase0)
+        if (resultArray[p].key===result3[q].key){
+          //console.log("here")
+          let extraMeaning = "《" + result3[q].phrase + "》" + result3[q].meaning
+          resultArray[p].shortMeaning=resultArray[p].shortMeaning+"<br>"+extraMeaning
+          resultArray[p].veryShortMeaning=resultArray[p].veryShortMeaning+"<br>"+extraMeaning
+          P=p+1
+          break
+        }
+      }
+    }
+      
+    /*
     resultArray = resultArray.map((i) => {
       let newMeaning = i.shortMeaning || "";
       let VeryShortMeaningAdd=""
@@ -951,46 +1007,36 @@ function runSearch() {
       i.shortMeaning = newMeaning;
       i.veryShortMeaningAdd=VeryShortMeaningAdd
       return i;
-    });
+    });*/
 
     let UnitConversions=findUnitConversions(words)//単位変換
     //console.log("UnitConversions:"+UnitConversions)
-    let I=0
-    
+    let I=1
     for (let q = 0; q < UnitConversions.length; q++) {
       let u=UnitConversions[q].unit
-      let singledU=u
-      if (u.endsWith("s")) {
-        //三単現、複数形のs消去
-        let original = u.replace(/s$/, "");
-        res = lookupwords([original], 1);
-        if (res) {
-          singledU=original
-        }
-        if (u.endsWith("ies")) {
-          original = u.replace(/(ies)$/, "y");
-        }
-        if (/(oes|ses|ches|shes|xes|zes)$/.test(u)) {
-          original = u.replace(/(es)$/, "");
-        }
-        res = lookupwords([original], 1);
-        if (res) {
-          singledU=original
-        }
-      }
+      console.log("u:"+u)
       for (i=I ;i<resultArray.length;i++){
-        if (resultArray[i].phrase===singledU){
-          let extraMeaning =UnitConversions[q].value+" "+ UnitConversions[q].unit  ; // 5 gallons→
-          for(let r=0;r<UnitConversions[q].converted.length;r++){
-            if (r===0){
-              extraMeaning=extraMeaning+"<br>　　"+UnitConversions[q].converted[r]
-            }else{
-              extraMeaning=extraMeaning+"<br>　　" +UnitConversions[q].converted[r]
+        console.log("i:"+i+"resultArray[i].phrase0:"+resultArray[i].phrase0)
+        console.log("i:"+i+"resultArray[i-1].phrase0:"+resultArray[i-1].phrase0)
+        if (resultArray[i].phrase0===u){
+          console.log(resultArray[i-1].phrase0+UnitConversions[q].value)
+          if(resultArray[i-1].phrase0===UnitConversions[q].value.toString()){
+            console.log("here")
+            let extraMeaning =UnitConversions[q].value+" "+ UnitConversions[q].unit  ; // 5 gallons→
+            for(let r=0;r<UnitConversions[q].converted.length;r++){
+              if(r===0){
+                extraMeaning=extraMeaning+"<br>　　" +UnitConversions[q].converted[r]
+              }else{
+                extraMeaning=extraMeaning+"<br>　　" +UnitConversions[q].converted[r]
+              }
             }
+            resultArray[i].shortMeaning=resultArray[i].shortMeaning+"<br>" +"※"+extraMeaning
+            if (resultArray[i].veryShortMeaning) {
+              resultArray[i].veryShortMeaning=resultArray[i].veryShortMeaning+"<br>" +"※"+extraMeaning
+            }
+            I=i+1
+            break
           }
-          resultArray[i].shortMeaning=resultArray[i].shortMeaning+"<br>" +"※"+extraMeaning
-          I=i+1
-          break
         }
       }
     }
@@ -1031,13 +1077,13 @@ function runSearch() {
       if(i.veryShortMeaning){
         short=i.veryShortMeaning
       }
-      if(i.shortReferencedMeaning){
-        short=short+ "　※" + i.referencedPhrase + "→" + i.shortReferencedMeaning
-      }
-      short+=i.veryShortMeaningAdd
+      //if(i.shortReferencedMeaning){
+      //  short=short+ "<br>※" + i.referencedPhrase + "→" + i.shortReferencedMeaning
+      //}
+      //short+=i.veryShortMeaningAdd
       let full =i.fullMeaning
       if(i.referencedMeaning){
-        full += "　※"+ i.referencedPhrase + "→"+i.referencedMeaning;
+        full += "<br>※"+ i.referencedPhrase + "→"+i.referencedMeaning;
       }
       return `
         <div class="word-block">
