@@ -627,23 +627,7 @@ const units=[
   "pence",
   "farthing", "farthings"
 ]
-function findUnitConversions(words){
-  let conversions=[];
-  for(let i=0;i<words.length-1;i++){
-    const unit=words[i]
-    if(!units.includes(unit))continue//i語目が単位でなければ次の単語へ進む
-    if(i===0)continue//1語目は前に数字がつき得ないので次の単語へ進む
-    const value = Number(words[i-1])//i-1語目を文字列から数字に変換する
-    if (isNaN(value)) continue//数字にならない文字列なら次の単語に進む
-    conversions.push({//数字＋単位ならconversionsに送る
-      value:value,
-      unit:unit,
-      i:i
-    })
-  }
-  return conversions
-}
-function Convert(v,u,i){
+function Convert(v,u){
   //長さ
   if(["inch", "inches","in"].includes(u)){
     return[
@@ -683,7 +667,7 @@ function Convert(v,u,i){
   if([ "ounce", "ounces", "oz"].includes(u)){
     return[
       `常衡で約${(v*28.349).toFixed(1)}g`,
-      `貴金属、薬品で約${(v*31.103).toFixed(1)}g`,
+      `貴金属・薬品で約${(v*31.103).toFixed(1)}g`,
       `《米》約${(v*29.573).toFixed(1)}mL`,
       `《英》約${(v*28.413).toFixed(1)}mL`,
     ]
@@ -707,7 +691,7 @@ function Convert(v,u,i){
       `《米》液体で約${(v*3.7853).toFixed(1)}L`,
       `《米》穀物で約${(v*4.405).toFixed(1)}L`,
       `《英》約${(v*4.546).toFixed(1)}L`,
-      `${v*4}quarts,${v*8}pints,${v*128}fluid ounces`
+      `=${v*4}quarts,${v*8}pints,${v*128}fluid ounces`
     ]
   }
   if(["quart", "quarts", "qt"].includes(u)){
@@ -755,7 +739,9 @@ function Convert(v,u,i){
   */
 //速度
   if (["mph","m.p.h"].includes(u)) {
-    return `約${(v * 1.609344).toFixed(1)}km/h`;
+    return [`
+      約${(v * 1.609344).toFixed(1)}km/h`
+    ]
   }
 //温度
   if(["fahrenheit", "°f"].includes(u)){
@@ -828,7 +814,29 @@ function Convert(v,u,i){
       `960分の${v}pounds,4分の${v}pence`
     ];
   }
-
+}
+function findUnitConversions(words){
+  //console.log("1_words:"+words)
+  let conversions=[];
+  for(let i=0;i<words.length;i++){
+    //console.log("i="+i)
+    const unit = words[i];
+    if(!units.includes(unit))continue//i語目が単位でなければ次の単語へ進む
+    if(i===0)continue//1語目は前に数字がつき得ないので次の単語へ進む
+    console.log("2_unit:"+unit)
+    const value = Number(words[i-1])//i-1語目を文字列から数字に変換する
+    if (isNaN(value)) continue//数字にならない文字列なら次の単語に進む
+    //console.log("3_value:"+value)
+    const converted=Convert(value,unit)
+    conversions.push({//数字＋単位ならconversionsに送る
+      value:value,
+      unit:unit,
+      converted:converted,
+      //i:i
+    })
+  }
+  //console.log("4_conversions:"+conversions)
+  return conversions
 }
 //以上単位変換機能
 
@@ -892,7 +900,6 @@ function runSearch() {
       .replace(/\s+/g, " ") //連続する空白文字を半角スペース1つに置き換える
       .trim()
       .split(" "); //配列に戻す
-
     let result2 = lookupIdiom2(words);
     resultArray = result2.map((result2Item) => {
       let [key, phrase, meaning,referencedPhrase,referencedMeaning] = [
@@ -945,36 +952,106 @@ function runSearch() {
       i.veryShortMeaningAdd=VeryShortMeaningAdd
       return i;
     });
+
+    let UnitConversions=findUnitConversions(words)//単位変換
+    //console.log("UnitConversions:"+UnitConversions)
+    let I=0
+    
+    for (let q = 0; q < UnitConversions.length; q++) {
+      let u=UnitConversions[q].unit
+      let singledU=u
+      if (u.endsWith("s")) {
+        //三単現、複数形のs消去
+        let original = u.replace(/s$/, "");
+        res = lookupwords([original], 1);
+        if (res) {
+          singledU=original
+        }
+        if (u.endsWith("ies")) {
+          original = u.replace(/(ies)$/, "y");
+        }
+        if (/(oes|ses|ches|shes|xes|zes)$/.test(u)) {
+          original = u.replace(/(es)$/, "");
+        }
+        res = lookupwords([original], 1);
+        if (res) {
+          singledU=original
+        }
+      }
+      for (i=I ;i<resultArray.length;i++){
+        if (resultArray[i].phrase===singledU){
+          let extraMeaning =UnitConversions[q].value+" "+ UnitConversions[q].unit  ; // 5 gallons→
+          for(let r=0;r<UnitConversions[q].converted.length;r++){
+            if (r===0){
+              extraMeaning=extraMeaning+"<br>　　"+UnitConversions[q].converted[r]
+            }else{
+              extraMeaning=extraMeaning+"<br>　　" +UnitConversions[q].converted[r]
+            }
+          }
+          resultArray[i].shortMeaning=resultArray[i].shortMeaning+"<br>" +"※"+extraMeaning
+          I=i+1
+          break
+        }
+      }
+    }
+    /*
+    resultArray = resultArray.map((i) => {
+      for (let q = 0; q < UnitConversions.length; q++) {
+        const key1 = i.phrase;
+        const key2 = UnitConversions[q].unit;
+        let extraMeaning = "";
+        if (key1 === key2) {
+          extraMeaning =UnitConversions[q].value+" "+ UnitConversions[q].unit + "→" ; // 追加の意味
+          for (let r = 0; r < UnitConversions[q].converted.length; r++) {
+            if (r===0){
+              extraMeaning+= UnitConversions[q].converted[r]
+            }else{
+              extraMeaning+=","+ UnitConversions[q].converted[r]
+            }
+          }
+          if (extraMeaning) {//extraMeaningがあれば足す
+            if (newMeaning === "訳が見つかりません" || newMeaning === "") {
+              newMeaning = extraMeaning;
+            } else {
+              newMeaning = newMeaning + "　※" + extraMeaning;
+              //VeryShortMeaningAdd =VeryShortMeaningAdd+ "　※" + extraMeaning;
+            }
+          }
+        }
+      }
+      i.shortMeaning = newMeaning;
+      return i;
+    });*/
     //console.log("searchInput_resultArrayAfterResult3=", resultArray);
     //translationContainer.style.display = "flex";
     let translatedHTML=resultArray.map((i,index) => {
-    const phrase=i.phrase
-    //const short = i.veryShortMeaning ? i.veryShortMeaning + i.veryShortMeaningAdd : i.shortMeaning;
-    let short=i.shortMeaning
-    if(i.veryShortMeaning){
-      short=i.veryShortMeaning
-    }
-    if(i.shortReferencedMeaning){
-      short=short+ "　※" + i.referencedPhrase + "→" + i.shortReferencedMeaning
-    }
-    short+=i.veryShortMeaningAdd
-    let full =i.fullMeaning
-    if(i.referencedMeaning){
-      full += "　※"+ i.referencedPhrase + "→"+i.referencedMeaning;
-    }
-    return `
-      <div class="word-block">
-        <details>
-          <summary>
-            ${phrase}→${short}
-            <button class="saveBtn btn" data-index="${index}" data-phrase="${phrase}" data-short="${short}" data-full="${full}">
-            保存
-            </button>
-          </summary>
-          <div>${full}</div>
-        </details>
-      </div>
-    `;
+      const phrase=i.phrase
+      //const short = i.veryShortMeaning ? i.veryShortMeaning + i.veryShortMeaningAdd : i.shortMeaning;
+      let short=i.shortMeaning
+      if(i.veryShortMeaning){
+        short=i.veryShortMeaning
+      }
+      if(i.shortReferencedMeaning){
+        short=short+ "　※" + i.referencedPhrase + "→" + i.shortReferencedMeaning
+      }
+      short+=i.veryShortMeaningAdd
+      let full =i.fullMeaning
+      if(i.referencedMeaning){
+        full += "　※"+ i.referencedPhrase + "→"+i.referencedMeaning;
+      }
+      return `
+        <div class="word-block">
+          <details>
+            <summary>
+              ${phrase}→${short}
+              <button class="saveBtn btn" data-index="${index}" data-phrase="${phrase}" data-short="${short}" data-full="${full}">
+              保存
+              </button>
+            </summary>
+            <div>${full}</div>
+          </details>
+        </div>
+      `;
     })
     .join("");
     translationText.innerHTML=translatedHTML;
@@ -1613,10 +1690,10 @@ function debugLog(text){
 window.addEventListener("error", function(e){
   debugLog(
     "message: " + e.message + "<br>"+
-    " | file: " + e.filename + "<br>"+
     " | line: " + e.lineno + "<br>"+
-    " | column: " + e.colno+"<br>"+
-    " | ver:"+version+"<br>"
+    " | ver:"+version+"<br>"+
+    " | file: " + e.filename + "<br>"+
+    " | column: " + e.colno+"<br>"
   );
 });
 //searchInput.placeholder = "test2"
