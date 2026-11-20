@@ -1421,7 +1421,6 @@ function allDelete(){
 }
 
 //表示
-
 function renderSavedWords() {
   //const container = document.getElementById("savedWords");//外に書いた
   //container.innerHTML = [...savedWords].reverse().map(item =>`
@@ -1546,10 +1545,26 @@ remove(phrase);
 //Excel保存ボタンクリック
 exportBtn.addEventListener("click", exportToExcel);
 
+//保存した単語ボタンクリック
+const savedWordContainerBtn = document.getElementById("savedWordContainerBtn");
+savedWordContainerBtn.addEventListener("click", function() {
+  if (showSavedWords===true){
+    showSavedWords=false
+    hideSavedWords()
+    savedWordContainerBtn.innerHTML="▲保存リスト"
+  } else if (showSavedWords===false){
+    showSavedWords=true
+    renderSavedWords()
+    savedWordContainerBtn.innerHTML="▼保存リスト"
+  }
+});
+
 //自動保存モードクリック
+const autoSaveBtn = document.getElementById("autoSaveBtn");
 autoSaveBtn.addEventListener("click",autoSaveMode)
 
 //ラベル
+const changeLabelBtn = document.getElementById("changeLabelBtn");
 let labelNameDisplay =""
 let label=localStorage.getItem("label") || "";//以前のラベル読み込み
 //console.log("label="+label)
@@ -1565,6 +1580,7 @@ function changeLabelNameDisplay(newname){//ボタンに表示する用の文字�
   //console.log("function changeLabelNameDisplay(newname){"+newname)
 }
 
+//ラベル名変更ボタンクリック
 changeLabelBtn.addEventListener("click",function(){
   let newname =prompt("ラベル名を設定してください")
   if(newname!==null){//キャンセルが選択されるとnullが返るので、nullのときは何もしない
@@ -1577,6 +1593,7 @@ changeLabelBtn.addEventListener("click",function(){
 })
 
 //全消去ボタンクリック
+const allDeleteBtn = document.getElementById("allDeleteBtn");
 allDeleteBtn.addEventListener("click",function(){
   const removeBtns = savedWordsContainer.querySelectorAll(".removeBtn")
   //console.log("allDeleteBtn.addEventListener_1,removeBtns.length="+removeBtns.length)
@@ -1761,10 +1778,13 @@ key--tall
 */
 
 //キーボード
+let TemporalyShowSavedwords =""
+const keyboardBtn = document.getElementById("keyboardBtn");
 keyboardBtn.addEventListener("click",function(){//キーボードボタンでキーボードの表示非表示を選択する
   if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき、これから表示する
     //console.log("keyboardBtn.addEventListener(_1")
     if(isIPad){searchInput.readOnly=true}
+    TemporalyShowSavedwords=showSavedWords
     hideSavedWords()
     showSavedWords=false
     Keyboard.open(
@@ -1780,8 +1800,8 @@ keyboardBtn.addEventListener("click",function(){//キーボードボタンでキ
     //debugLog("① キーボード非表示");
     searchInput.readOnly=false
     //debugLog("② readOnly: " + searchInput.readOnly);
-    renderSavedWords()
-    showSavedWords=true
+    if (TemporalyShowSavedwords === true) {renderSavedWords()}
+    showSavedWords=TemporalyShowSavedwords
     Keyboard.close()
     virtualKeyboardOpen=false
     //searchInput.focus()
