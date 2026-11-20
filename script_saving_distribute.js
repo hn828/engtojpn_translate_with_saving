@@ -405,6 +405,27 @@ function lookupIdiom(words) {
           return res;
         }
       }
+      if (m === 1 && phrase.endsWith("ive")) {
+        //ive(creative→creativity等形容詞の名詞化)消去
+        let original = phrase.replace(/ive$/, "e");//enunciative
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/ive$/, "");//active
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/ative$/, "e");//causative(原因である)
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+      }
     }
   }
   return {
