@@ -1430,8 +1430,8 @@ function allDelete(){
 //表示
 function renderSavedWords() {
   //const container = document.getElementById("savedWords");//外に書いた
-  //container.innerHTML = [...savedWords].reverse().map(item =>`
-  container.innerHTML = savedWords.map(item =>`
+  //container.innerHTML = savedWords.map(item =>`
+  container.innerHTML = [...savedWords].reverse().map(item =>`
     <div class="word-block">
       <details>
         <summary>
