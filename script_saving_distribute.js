@@ -327,6 +327,51 @@ function lookupIdiom(words) {
           return res;
         }
       }
+      if (m === 1 && phrase.endsWith("ty")) {
+        //ity（～性）消去
+        let original = phrase.replace(/ty$/, "");//safety
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/ity$/, "e");//diversity
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/ity$/, "");//equality
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/icity$/, "e");//simplicity
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/ility$/, "e");//stability
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/bility$/, "ble");//responsibility
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/osity$/, "ous");//generosity
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+      }
       if (m === 1 && phrase.endsWith("ness")) {
         //ness(kindness等形容詞の名詞化)消去
         let original = phrase.replace(/ness$/, "");
