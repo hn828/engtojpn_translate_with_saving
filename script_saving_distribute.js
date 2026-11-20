@@ -1176,9 +1176,9 @@ function runSearch() {
       //}
       //short+=i.veryShortMeaningAdd
       let full =i.fullMeaning
-      if(i.referencedMeaning){
-        full += "<br>※"+ i.referencedPhrase + "→"+i.referencedMeaning;
-      }
+      //if(i.referencedMeaning){
+        //full += "<br>※"+ i.referencedPhrase + "→"+i.referencedMeaning;
+      //}
       return `
         <div class="word-block">
           <details>
