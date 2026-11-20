@@ -342,6 +342,24 @@ function lookupIdiom(words) {
           return res;
         }
       }
+      if (m === 1 && phrase.endsWith("ancy")) {
+        //ancy(errant（誤った）→errancy（誤り）等形容詞の名詞化)消去
+        let original = phrase.replace(/ancy$/, "ant");
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+      }
+      if (m === 1 && phrase.endsWith("ency")) {
+        //ency(urgent→urgency等形容詞の名詞化)消去
+        let original = phrase.replace(/ency$/, "ent");
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+      }
     }
   }
   return {
@@ -622,211 +640,7 @@ function lookupIdiom3(words) {
     //? newTranslation3
     //: translation3; 
 }
-/*
-//語尾削除単体 不完全、何にも使ってない
-function changeWords(words){
-  let changedWords = [];
-  let i = 0;
-  let result1;
-  while (i < words.length) {
-    let takenwords = words.slice(i, i + 3);
-    for (let m = 3; m >= 1; m = m - 1) {
-      phrase = words.slice(0, m).join(" ");
-      if (words.length >= m) {
-        //let res = lookupwords(words, m);
-        let res =dictionary[phrase]||""
-        if (res) {
-          changedWords.push(phrase);
-          break
-        }
-        if (m === 1 && phrase.endsWith("s")) {
-          //三単現、複数形のs消去
-          let original = phrase.replace(/s$/, "");
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          if (phrase.endsWith("ies")) {
-            original = phrase.replace(/(ies)$/, "y");
-          }
-          if (/(oes|ses|ches|shes|xes|zes)$/.test(phrase)) {
-            original = phrase.replace(/(es)$/, "");
-          }
-          res =dictionary[original]||""
-        if (res) {
-          changedWords.push(phrase);
-          break
-        }
-        }
-        if (m === 1 && phrase.endsWith("ed")) {
-          //過去形のed消去
-          let original2 = phrase.replace(/ed$/, "");
-          res =dictionary[original2]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          if (phrase.endsWith("ied")) {
-            original2 = phrase.replace(/(ied)$/, "y");
-          }
-          if (phrase.endsWith("cked")) {
-            original2 = phrase.replace(/(ked)$/, "");
-          }
-          if (phrase.endsWith("pped")) {
-            original2 = phrase.replace(/(ped)$/, "");
-          }
-          if (phrase.endsWith("rred")) {
-            original2 = phrase.replace(/(red)$/, "");
-          }
-          if (phrase.endsWith("tted")) {
-            original2 = phrase.replace(/(ted)$/, "");
-          }
-          res =dictionary[original2]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original2 = phrase.replace(/d$/, "");//generated
-          res =dictionary[original2]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-        }
-        if (m === 1 && phrase.endsWith("ing")) {
-          //ing消去
-          let original3 = phrase.replace(/ing$/, "");
-          res =dictionary[original3]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          if (phrase.endsWith("ying")) {
-            original3 = phrase.replace(/(ying)$/, "ie");
-          }
-          if (/([bcdfghjklmnpqrstvwxyz])\1ing$/.test(phrase)) {
-            original3 = phrase.replace(/([bcdfghjklmnpqrstvwxyz])\1ing$/, "$1");
-          }
-          res =dictionary[original3]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original3 = phrase.replace(/(ing)$/, "e");
-          res =dictionary[original3]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-        }
-        if (m === 1 && phrase.endsWith("est")) {
-          //最上級est消去
-          let original4 = phrase.replace(/est$/, "");
-          res =dictionary[original4]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original4 = phrase.replace(/st$/, "");
-          res =dictionary[original4]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          if (/([bcdfghjklmnpqrstvwxyz])\1est$/.test(phrase)) {
-            original4 = phrase.replace(/([bcdfghjklmnpqrstvwxyz])\1est$/, "$1");
-          }
-          res =dictionary[original4]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original4 = phrase.replace(/iest$/, "y");
-          res =dictionary[original4]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-        }
-        if (m === 1 && phrase.endsWith("er")) {
-          //比較級er消去
-          let original = phrase.replace(/er$/, "");
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original = phrase.replace(/r$/, "");
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          if (/([bcdfghjklmnpqrstvwxyz])\1er$/.test(phrase)) {
-            original = phrase.replace(/([bcdfghjklmnpqrstvwxyz])\1er$/, "$1");
-          }
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original = phrase.replace(/iest$/, "y");
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-        }
-        if (m === 1 && phrase.endsWith("ly")) {
-          //副詞、形容詞ly消去
-          let original = phrase.replace(/ly$/, "");
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original = phrase.replace(/ally$/, "");//basically
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original = phrase.replace(/ily$/, "y");//happily
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original = phrase.replace(/ly$/, "le");//gently
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-        }
-        if (m === 1 && phrase.endsWith("ness")) {
-          //ness(kindness等形容詞の名詞化)消去
-          let original = phrase.replace(/ness$/, "");
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-          original = phrase.replace(/iness$/, "y");//hapiness
-          res =dictionary[original]||""
-          if (res) {
-            changedWords.push(phrase);
-            break
-          }
-        }
-      }
-    }
-    i = i + m;
-  }
-  return changedWords
-}
-*/
+
 //以下単位変換機能
 const units=[
   "inch", "inches","in",
