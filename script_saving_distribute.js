@@ -1469,21 +1469,7 @@ function exportToExcel(){
   XLSX.writeFile(wb,"saved_words.xlsx")
 }
 
-function autoSaveMode(){
-  if (autoSave===false){
-    autoSave=true
-    autoSaveBtn.classList.add("autoSaveOn")
-    autoSaveBtn.innerHTML="自動保存モード：on"
-    //console.log("1")
-  }  else if (autoSave===true){
-    autoSave=false
-    autoSaveBtn.classList.remove("autoSaveOn")
-    autoSaveBtn.innerHTML="自動保存モード：off"
-    //console.log("2")
-  }
-  //console.log(autoSave)
 
-}
 
 //画面下部のcontainer
 const savedWordsContainer = document.getElementById("savedWordsContainer");
@@ -1568,8 +1554,37 @@ savedWordContainerBtn.addEventListener("click", function() {
   console.log(localStorage.getItem("showSavedWords"))
 });
 
-//自動保存モードクリック
+//自動保存モード切替の関数
+function autoSaveMode(){
+  if (autoSave===false){
+    autoSave=true
+    autoSaveBtn.classList.add("autoSaveOn")
+    autoSaveBtn.innerHTML="自動保存モード：on"
+    //console.log("1")
+  }  else if (autoSave===true){
+    autoSave=false
+    autoSaveBtn.classList.remove("autoSaveOn")
+    autoSaveBtn.innerHTML="自動保存モード：off"
+    //console.log("2")
+  }
+  //console.log(autoSave)
+localStorage.setItem("autoSave", String(autoSave));
+}
+
+//初め
 const autoSaveBtn = document.getElementById("autoSaveBtn");
+if (localStorage.getItem("autoSave") === "true"){
+  autoSave=true
+  autoSaveBtn.classList.add("autoSaveOn")
+  autoSaveBtn.innerHTML="自動保存モード：on"
+}
+/*else{他のところで以下の値が初期値なので不要だと思う
+  autoSave=false
+  autoSaveBtn.classList.remove("autoSaveOn")
+  autoSaveBtn.innerHTML="自動保存モード：off"
+}
+*/
+//自動保存モードクリック
 autoSaveBtn.addEventListener("click",autoSaveMode)
 
 //ラベル
