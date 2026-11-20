@@ -201,6 +201,9 @@ function lookupIdiom(words) {
         if (phrase.endsWith("tted")) {
           original2 = phrase.replace(/(ted)$/, "");
         }
+        if (phrase.endsWith("lled")) {
+          original2 = phrase.replace(/(led)$/, "");
+        }
         res = lookupwords([original2], 1);
         if (res) {
           res.phrase0=phrase
@@ -290,7 +293,7 @@ function lookupIdiom(words) {
           res.phrase0=phrase
           return res;
         }
-        original = phrase.replace(/iest$/, "y");
+        original = phrase.replace(/ier$/, "y");
         res = lookupwords([original], 1);
         if (res) {
           res.phrase0=phrase
