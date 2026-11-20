@@ -1324,6 +1324,9 @@ const container = document.getElementById("savedWords");
 const exportBtn = document.getElementById("exportBtn");
 let autoSave=false
 let showSavedWords=true
+if (localStorage.getItem("showSavedWords") === "false") {
+  showSavedWords = false;
+}
 
 //はじめにキーボードを表示するか、保存した単語を表示するか
 const isMobile = window.matchMedia("(pointer: coarse)").matches;//スマホかタブレットの場合
@@ -1348,7 +1351,11 @@ window.addEventListener("DOMContentLoaded",function(){
     //document.body.innerHTML="if(isMobile){_104"+isMobile+navigator.userAgent
   }    
   if(!isIPad){//スマホかパソコンの場合
-    renderSavedWords()
+    if (showSavedWords!==false){//前回がfalseでない場合（if (localStorage.getItem("showSavedWords")のところで情報を得ている）
+      renderSavedWords()
+    }else{//前回閉じていたならhidesavedwords()はいらないけど、ボタンの表示を変更する
+      savedWordContainerBtn.innerHTML="▲保存リスト"
+    }
     //console.log("if(isMobile){_2"+navigator.userAgent)
     //document.body.innerHTML="if(isMobile){_105"+isMobile+navigator.userAgent
     }
@@ -1557,6 +1564,8 @@ savedWordContainerBtn.addEventListener("click", function() {
     renderSavedWords()
     savedWordContainerBtn.innerHTML="▼保存リスト"
   }
+  localStorage.setItem("showSavedWords", String(showSavedWords));
+  console.log(localStorage.getItem("showSavedWords"))
 });
 
 //自動保存モードクリック
@@ -1778,7 +1787,7 @@ key--tall
 */
 
 //キーボード
-let TemporalyShowSavedwords =""
+let TemporalyShowSavedwords =showSavedWords
 const keyboardBtn = document.getElementById("keyboardBtn");
 keyboardBtn.addEventListener("click",function(){//キーボードボタンでキーボードの表示非表示を選択する
   if(Keyboard.elements.main.classList.contains("keyboard--hidden")){//キーボードがまだ表示されていないとき、これから表示する
