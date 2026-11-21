@@ -426,6 +426,21 @@ function lookupIdiom(words) {
           return res;
         }
       }
+      if (m === 1 && phrase.endsWith("al")) {
+        //al(~に関する)消去
+        let original = phrase.replace(/al$/, "e");//approval
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/al$/, "");//accidental
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+      }
     }
   }
   return {
