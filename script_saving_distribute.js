@@ -192,17 +192,8 @@ function lookupIdiom(words) {
         if (phrase.endsWith("cked")) {
           original2 = phrase.replace(/(ked)$/, "");
         }
-        if (phrase.endsWith("pped")) {
-          original2 = phrase.replace(/(ped)$/, "");
-        }
-        if (phrase.endsWith("rred")) {
-          original2 = phrase.replace(/(red)$/, "");
-        }
-        if (phrase.endsWith("tted")) {
-          original2 = phrase.replace(/(ted)$/, "");
-        }
-        if (phrase.endsWith("lled")) {
-          original2 = phrase.replace(/(led)$/, "");
+        if (/([bcdfghjklmnpqrstvwxyz])\1ed$/.test(phrase)) {
+          original2 = phrase.replace(/([bcdfghjklmnpqrstvwxyz])\1ed$/, "$1");
         }
         res = lookupwords([original2], 1);
         if (res) {
@@ -244,13 +235,13 @@ function lookupIdiom(words) {
       }
       if (m === 1 && phrase.endsWith("est")) {
         //最上級est消去
-        let original4 = phrase.replace(/est$/, "");
+        let original4 = phrase.replace(/st$/, "");
         res = lookupwords([original4], 1);
         if (res) {
           res.phrase0=phrase
           return res;
         }
-        original4 = phrase.replace(/st$/, "");
+        original4 = phrase.replace(/est$/, "");
         res = lookupwords([original4], 1);
         if (res) {
           res.phrase0=phrase
@@ -264,11 +255,13 @@ function lookupIdiom(words) {
           res.phrase0=phrase
           return res;
         }
-        original4 = phrase.replace(/iest$/, "y");
-        res = lookupwords([original4], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
+        if (phrase.endsWith("iest")) {
+          original4 = phrase.replace(/iest$/, "y");
+          res = lookupwords([original4], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
         }
       }
       if (m === 1 && phrase.endsWith("er")) {
@@ -287,17 +280,19 @@ function lookupIdiom(words) {
         }
         if (/([bcdfghjklmnpqrstvwxyz])\1er$/.test(phrase)) {
           original = phrase.replace(/([bcdfghjklmnpqrstvwxyz])\1er$/, "$1");
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
         }
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
-        }
-        original = phrase.replace(/ier$/, "y");
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
+        if (phrase.endsWith("ier")) {
+          original = phrase.replace(/ier$/, "y");
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
         }
       }
       if (m === 1 && phrase.endsWith("ly")) {
@@ -308,19 +303,23 @@ function lookupIdiom(words) {
           res.phrase0=phrase
           return res;
         }
-        original = phrase.replace(/ally$/, "");//basically
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
+        if (phrase.endsWith("ally")) {
+          original = phrase.replace(/ally$/, "");//basically
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
         }
-        original = phrase.replace(/ily$/, "y");//happily
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
+        if (phrase.endsWith("ily")) {
+          original = phrase.replace(/ily$/, "y");//happily
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
         }
-        original = phrase.replace(/ly$/, "le");//gently
+        original = phrase.replace(/y$/, "e");//gently
         res = lookupwords([original], 1);
         if (res) {
           res.phrase0=phrase
@@ -335,41 +334,43 @@ function lookupIdiom(words) {
           res.phrase0=phrase
           return res;
         }
-        original = phrase.replace(/ity$/, "e");//diversity
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
-        }
-        original = phrase.replace(/ity$/, "");//equality
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
-        }
-        original = phrase.replace(/icity$/, "e");//simplicity
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
-        }
-        original = phrase.replace(/ility$/, "e");//stability
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
-        }
-        original = phrase.replace(/bility$/, "ble");//responsibility
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
-        }
-        original = phrase.replace(/osity$/, "ous");//generosity
-        res = lookupwords([original], 1);
-        if (res) {
-          res.phrase0=phrase
-          return res;
+        if (phrase.endsWith("ity")) {
+          original = phrase.replace(/ity$/, "");//equality
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
+          original = phrase.replace(/ity$/, "e");//diversity
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
+          if (phrase.endsWith("icity")) {
+            original = phrase.replace(/icity$/, "e");//simplicity
+            res = lookupwords([original], 1);
+            if (res) {
+              res.phrase0=phrase
+              return res;
+            }
+          }
+          if (phrase.endsWith("bility")) {
+            original = phrase.replace(/bility$/, "ble");//responsibility
+            res = lookupwords([original], 1);
+            if (res) {
+              res.phrase0=phrase
+              return res;
+            }
+          }
+          if (phrase.endsWith("osity")) {
+            original = phrase.replace(/osity$/, "ous");//generosity
+            res = lookupwords([original], 1);
+            if (res) {
+              res.phrase0=phrase
+              return res;
+            }
+          }
         }
       }
       if (m === 1 && phrase.endsWith("ness")) {
@@ -380,7 +381,25 @@ function lookupIdiom(words) {
           res.phrase0=phrase
           return res;
         }
-        original = phrase.replace(/iness$/, "y");//hapiness
+        if (phrase.endsWith("iness")) {
+          original = phrase.replace(/iness$/, "y");//hapiness
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
+        }
+      }
+      if (m === 1 && phrase.endsWith("ance")) {
+        let original = phrase.replace(/ance$/, "ant");//importance
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+      }
+      if (m === 1 && phrase.endsWith("ence")) {
+        let original = phrase.replace(/ence$/, "ent");//difference
         res = lookupwords([original], 1);
         if (res) {
           res.phrase0=phrase
@@ -397,7 +416,7 @@ function lookupIdiom(words) {
         }
       }
       if (m === 1 && phrase.endsWith("ency")) {
-        //ency(urgent→urgency等形容詞の名詞化)消去
+        //ency消去(urgency→urgent)
         let original = phrase.replace(/ency$/, "ent");
         res = lookupwords([original], 1);
         if (res) {
@@ -406,35 +425,140 @@ function lookupIdiom(words) {
         }
       }
       if (m === 1 && phrase.endsWith("ive")) {
-        //ive(creative→creativity等形容詞の名詞化)消去
-        let original = phrase.replace(/ive$/, "e");//enunciative
+        //ive消去(creative→create等)
+        let original = phrase.replace(/ive$/, "");//active
         res = lookupwords([original], 1);
         if (res) {
           res.phrase0=phrase
           return res;
         }
-        original = phrase.replace(/ive$/, "");//active
+        original = phrase.replace(/ive$/, "e");//enunciative
         res = lookupwords([original], 1);
         if (res) {
           res.phrase0=phrase
           return res;
         }
-        original = phrase.replace(/ative$/, "e");//causative(原因である)
+        if (phrase.endsWith("ative")) {
+          original = phrase.replace(/ative$/, "e");//causative(原因である)
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
+        }
+      }
+      if (m === 1 && phrase.endsWith("al")) {
+        //al(~に関する)消去
+        let original = phrase.replace(/al$/, "");//accidental
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/al$/, "e");//approval
         res = lookupwords([original], 1);
         if (res) {
           res.phrase0=phrase
           return res;
         }
       }
-      if (m === 1 && phrase.endsWith("al")) {
-        //al(~に関する)消去
-        let original = phrase.replace(/al$/, "e");//approval
+      if (m === 1 && phrase.endsWith("ic")) {
+        //ic(~である)消去
+        let original = phrase.replace(/ic$/, "");//atomic
         res = lookupwords([original], 1);
         if (res) {
           res.phrase0=phrase
           return res;
         }
-        original = phrase.replace(/al$/, "");//accidental
+        original = phrase.replace(/ic$/, "y");//economic
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/ic$/, "e");//automatic
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+      }
+      if (m === 1 && phrase.endsWith("ous")) {
+        //ous(に満ちた/性質をもつ)消去
+        let original = phrase.replace(/ous$/, "e");//famous
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        if (phrase.endsWith("ious")) {
+          original = phrase.replace(/ious$/, "y");//glorious
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
+        }
+        original = phrase.replace(/ous$/, "");//dangerous
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+      }
+      if (m === 1 && phrase.endsWith("ful")) {
+        //ful(に満ちた)消去
+        let original = phrase.replace(/ful$/, "");//
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/ful$/, "e");//
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        if (phrase.endsWith("iful")) {
+          original = phrase.replace(/iful$/, "y");//beautiful
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
+        }
+      }
+      if (m === 1 && phrase.endsWith("able")) {
+        let original = phrase.replace(/able$/, "e");
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/able$/, "");//enjoyable
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        if (phrase.endsWith("iable")) {
+          original = phrase.replace(/iable$/, "y");//reliable
+          res = lookupwords([original], 1);
+          if (res) {
+            res.phrase0=phrase
+            return res;
+          }
+        }
+      }
+      if (m === 1 && phrase.endsWith("ment")) {
+        let original = phrase.replace(/ment$/, "");
+        res = lookupwords([original], 1);
+        if (res) {
+          res.phrase0=phrase
+          return res;
+        }
+        original = phrase.replace(/ment$/, "e");//argument
         res = lookupwords([original], 1);
         if (res) {
           res.phrase0=phrase
