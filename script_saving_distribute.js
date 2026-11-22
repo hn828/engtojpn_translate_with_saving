@@ -2034,6 +2034,7 @@ let version="ver2.1.0"
 function debugLog(text){
   translationHistory.innerHTML += text + "<br>";
 }
+/*
 window.addEventListener("error", function(e){
   debugLog(
     "message: " + e.message + "<br>"+
@@ -2042,6 +2043,32 @@ window.addEventListener("error", function(e){
     " | file: " + e.filename + "<br>"+
     " | column: " + e.colno+"<br>"
   );
+});
+*/
+function debugLog(text) {
+  const line = document.createElement("pre");
+  line.style.whiteSpace = "pre-wrap";
+  line.textContent = text;
+  translationHistory.appendChild(line);
+}
+
+window.addEventListener("error", function(e) {
+  debugLog([
+    `message: ${e.message}`,
+    `line: ${e.lineno}`,
+    `file: ${e.filename}`,
+    `column: ${e.colno}`,
+    `stack: ${e.error?.stack ?? "(取得できません)"}`
+  ].join("\n"));
+});
+
+window.addEventListener("unhandledrejection", function(e) {
+  const reason = e.reason;
+  const details = reason instanceof Error
+    ? `${reason.name}: ${reason.message}\n${reason.stack ?? ""}`
+    : String(reason);
+
+  debugLog(`unhandledrejection:\n${details}`);
 });
 //searchInput.placeholder = "test2"
 
