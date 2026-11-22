@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "engtojpn-saving-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 
 const APP_FILES = [
   "./",
@@ -7,8 +7,6 @@ const APP_FILES = [
   "./script_saving_distribute.js?v-2",
   "./xlsx.full.min.js",
   "./favicon.png",
-  "./ejdict_connected_idioms_lower_ver16.json",
-  "./ejdict_kaisetunaiidiom.json",
   "./commonwords.json",
 ];
 
