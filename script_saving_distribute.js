@@ -772,6 +772,28 @@ function lookupIdiom3(words) {
       for (let y = 0; y < chancedIdioms.length; y++) {
         let chancedIdiom = chancedIdioms[y];
         let nextWordDistance = chancedIdiom.at(-1);
+        let nextWord = "";
+        for (let n = 1 + nextWordDistance;n < chancedIdiom.length - 2;n++) {
+          nextWord = chancedIdiom[n]
+            .replace(/[^a-z]/gi, "")
+            .toLowerCase();
+          if (nextWord !== "") {
+            break;
+          }
+        }
+        if (nextWord !== "") {
+          for (let f = 1; p + f < words.length; f++) {
+            let candidateWord = words[p + f]
+              .replace(/[^a-z]/gi, "")
+              .toLowerCase();
+            if (candidateWord !== "" && nextWord === candidateWord){
+              translation3.push(chancedIdiom);
+              break;
+            }
+          }
+        }
+
+        /*
         let nextWord = chancedIdiom[1 + nextWordDistance]
           .replace(/[^a-z]/gi, "")
           .toLowerCase();
@@ -787,6 +809,7 @@ function lookupIdiom3(words) {
             translation3.push(chancedIdiom);
           }
         }
+        */
       }
     }
   }
@@ -796,7 +819,7 @@ function lookupIdiom3(words) {
     let meaningA = translation3[i].at(-2);
     for (let j = i + 1; j < translation3.length; j++) {
       let meaningB = translation3[j].at(-2);
-      if (meaningA === meaningB) {
+      if (meaningA === meaningB) {//同じ意味のイディオムが複数ある場合語句を比較して違う部分をかっこでくくる
         let newIdiom = [];
         for (
           let k = 0;
