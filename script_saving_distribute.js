@@ -2027,14 +2027,16 @@ document.addEventListener(
 )
 
 //バージョン確認
-let version="ver2.2.0"
+let version="ver2.2.1"
+debugLog("version: "+version)
 //translationHistory.innerHTML +=version + "<br>"
 
 //ipadデバッグ用
+/*
 function debugLog(text){
   translationHistory.innerHTML += text + "<br>";
 }
-/*
+
 window.addEventListener("error", function(e){
   debugLog(
     "message: " + e.message + "<br>"+
@@ -2059,7 +2061,7 @@ window.addEventListener("error", function(e) {
     `file: ${e.filename}`,
     `column: ${e.colno}`,
     `stack: ${e.error?.stack ?? "(取得できません)"}`,
-    `ver:${version}<br>`
+    `ver:${version}`
   ].join("\n"));
 });
 
