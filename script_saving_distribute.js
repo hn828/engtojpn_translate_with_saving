@@ -2058,7 +2058,8 @@ window.addEventListener("error", function(e) {
     `line: ${e.lineno}`,
     `file: ${e.filename}`,
     `column: ${e.colno}`,
-    `stack: ${e.error?.stack ?? "(取得できません)"}`
+    `stack: ${e.error?.stack ?? "(取得できません)"}`,
+    `ver:${version}<br>`
   ].join("\n"));
 });
 
