@@ -684,23 +684,24 @@ function getShortMeaning(fullMeaning) {
 //意味短縮２　より短く
 function getveryShortMeaning(fullMeaning){
   let veryShortMeaning =fullMeaning
-  if (veryShortMeaning.includes("『")) {
+  if (veryShortMeaning.includes("『")) {// 『』がある場合は取り出し、/で区切る
     let matches = 
-    //veryShortMeaning.match(/『(.*?)』/g);
     matchNested(veryShortMeaning,"『","』").map(m=>m[0])
     veryShortMeaning = matches.map((s) => s.replace(/[『』]/g, "")).join("/");
-  }else{
+  }else{//『』がなければ、最初の / より前の意味を候補にする
     veryShortMeaning = fullMeaning.split(/[\/]/)[0];
   }
-  //let shortMeaning = fullMeaning.replace(/《.*?》/g, "");
-  //console.log("getveryShortMeaning_fullMeaning1:", fullMeaning,"veryShortMeaning:",veryShortMeaning);
-  if (/^《[^》]*?》$/.test(veryShortMeaning)){//do→《疑問文・否定文を作る》 / 《否定命令文を作る》
-    //veryshortMeaning=veryshortMeaning.matchAll(/《([^》]*)》/g)[0][1]
+  if (/^《[^》]*?》$/.test(veryShortMeaning)){// 意味全体が《...》だけの場合は、囲みの中身を返して終了する//do→《疑問文・否定文を作る》 / 《否定命令文を作る》
     veryShortMeaning=matchNested(veryShortMeaning,"《","》")[0][1]
     return veryShortMeaning
   }
+
+  if (veryShortMeaning.split("/").filter(m => /[ぁ-んァ-ヶ一-龠々ー]/.test(m)).length === 0){//『』がある場合は取り出し/で区切るの処理で出てきたものが英語・数字だけなら、最初の / より前の意味を候補にする
+    veryShortMeaning = fullMeaning.split(/[\/]/)[0];
+  }
+
+  //《...》で囲まれた熟語表記があれば熟語とその意味を取り除く　例）行く/《go on》継続する /...
   let idiomMatches = [];
-  //for (const m of veryshortMeaning.matchAll(/《([^》]*)》/g)) {
   let veryShortMeaningMatchAll=matchNested(veryShortMeaning, "《", "》")
   for (const m of veryShortMeaningMatchAll){
     //《》で囲まれた部分を全部抜き出す。idiomMatchesに入れる。
@@ -718,10 +719,10 @@ function getveryShortMeaning(fullMeaning){
     let idiomMatchesmoji = idiomMatches[n].idiom;
     if (idiomMatchesmoji) {
       if (!/[^A-Za-z .『』]/.test(idiomMatchesmoji)) {
-        // 英字・スペース・ピリオド『』だけで構成されている
+        // 英字・スペース・ピリオド『』だけで構成されている　例)《go on》継続する 《英》などでない　
         let meaningAfter2 = veryShortMeaning.slice(idiomMatches[n].nextIndex);
         let nextSlash2 = meaningAfter2.indexOf("/");
-        if (nextSlash2 !== -1) {//スラッシュが見つかったら
+        if (nextSlash2 !== -1) {//スラッシュが見つかったらスラッシュまで削る　例）行く/《go on》 /...
           veryShortMeaning = veryShortMeaning.replace(
             meaningAfter2.slice(0, nextSlash2),
             "",
@@ -736,10 +737,11 @@ function getveryShortMeaning(fullMeaning){
           );
         }
       }
-      //veryShortMeaning = veryShortMeaning.replace(/《.*?》/g, "");
-      veryShortMeaning = replaceNested(veryShortMeaning,"《","》");
+      veryShortMeaning = replaceNested(veryShortMeaning,"《","》");//《》で囲まれた部分を消去 例）行く//...
     }
   }
+
+  //かっこでくくられた部分があれば取り除く
   const brackets = [
     ["(", ")"],
     ["<", ">"],
@@ -754,11 +756,11 @@ function getveryShortMeaning(fullMeaning){
   .replace(/(,\/)/g, "/")
   .replace(/(;\/)/g, "/")
   let veryShortMeaningDividedBySlash=veryShortMeaning.split("/")
+  // 日本語を含む候補だけを残す
   let filtered2 = veryShortMeaningDividedBySlash.filter(m => /[ぁ-んァ-ヶ一-龠々ー]/.test(m));
   if(filtered2){
     veryShortMeaning=filtered2[0]
   }
-  //console.log("getveryShortMeaning_veryShortMeaning2=",veryShortMeaning)
   return veryShortMeaning;
 }
 
