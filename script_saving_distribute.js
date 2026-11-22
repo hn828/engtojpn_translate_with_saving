@@ -1210,25 +1210,24 @@ function runSearch() {
 
 
     for (let q = 0; q < resultArray.length; q++) {
-      if(resultArray[q].shortReferencedMeaning){
-        resultArray[q].shortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
-        if (resultArray[q].veryShortMeaning) {
-          resultArray[q].veryShortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
+      if (!commonWords.includes(resultArray[q].phrase)) {
+        if(resultArray[q].shortReferencedMeaning){
+          resultArray[q].shortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
+          if (resultArray[q].veryShortMeaning) {
+            resultArray[q].veryShortMeaning+="<br>※" + resultArray[q].referencedPhrase + "→" + resultArray[q].shortReferencedMeaning
+          }
         }
-      }
-      if(resultArray[q].referencedMeaning){
-        resultArray[q].fullMeaning += "<br>※"+ resultArray[q].referencedPhrase + "→"+resultArray[q].referencedMeaning;
+        if(resultArray[q].referencedMeaning){
+          resultArray[q].fullMeaning += "<br>※"+ resultArray[q].referencedPhrase + "→"+resultArray[q].referencedMeaning;
+        }
       }
     }
 
     let result3 = lookupIdiom3(words);//解説内のイディオム 《go on 名》等  goes onは無理かも
     let P=0
     for (let q = 0; q < result3.length; q++) {
-      //console.log("q:"+q+"result3[q]:"+result3[q].key+result3[q].phrase+result3[q].meaning)
       for (p=P ;p<resultArray.length;p++){
-        //console.log("i:"+i+"resultArray[i].phrase0:"+resultArray[i].phrase0)
         if (resultArray[p].key===result3[q].key){
-          //console.log("here")
           let extraMeaning = "《" + result3[q].phrase + "》" + result3[q].meaning
           resultArray[p].shortMeaning=resultArray[p].shortMeaning+"<br>"+extraMeaning
           if (resultArray[p].veryShortMeaning) {
