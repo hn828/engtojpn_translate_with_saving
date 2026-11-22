@@ -2027,7 +2027,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-let version="ver2.1.0"
+let version="ver2.2.0"
 //translationHistory.innerHTML +=version + "<br>"
 
 //ipadデバッグ用
