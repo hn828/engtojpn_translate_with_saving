@@ -2087,7 +2087,7 @@ document.addEventListener(
 )
 
 //バージョン確認
-let version="ver2.2.1"
+let version="ver2.2.2"
 debugLog("version: "+version)
 //translationHistory.innerHTML +=version + "<br>"
 
