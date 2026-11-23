@@ -1614,6 +1614,66 @@ function hideSavedWords(){
 }
 
 //Excelファイルに保存
+let xlsxLoadPromise = null;
+
+function loadXlsx() {//xlsx.full.min.jsを読み込む
+  if (window.XLSX) {
+    return Promise.resolve(window.XLSX);
+  }
+
+  if (!xlsxLoadPromise) {
+    xlsxLoadPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "./xlsx.full.min.js";
+
+      script.onload = () => {
+        if (window.XLSX) {
+          resolve(window.XLSX);
+        } else {
+          xlsxLoadPromise = null;
+          reject(new Error("Excelライブラリの読み込み後にXLSXが見つかりません。"));
+        }
+      };
+
+      script.onerror = () => {
+        xlsxLoadPromise = null;
+        reject(new Error("Excelライブラリを読み込めませんでした。"));
+      };
+
+      document.head.appendChild(script);
+    });
+  }
+
+  return xlsxLoadPromise;
+}
+
+async function exportToExcel() {
+  if (savedWords.length === 0) {
+    alert("保存された単語がありません");
+    return;
+  }
+
+  try {
+    const XLSX = await loadXlsx();
+
+    const wsData = savedWords.map(item => ({
+      phrase: item.phrase,
+      short: item.short,
+      full: item.full,
+      count: item.count,
+      label: item.label
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(wsData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "SavedWords");
+    XLSX.writeFile(wb, "saved_words.xlsx");
+  } catch (error) {
+    console.error("Excel出力に失敗しました:", error);
+    alert("Excel出力に失敗しました。通信環境を確認して、もう一度お試しください。");
+  }
+}
+/*
 function exportToExcel(){
   if (savedWords.length===0){
     alert("保存された単語がありません")
@@ -1631,7 +1691,7 @@ function exportToExcel(){
   XLSX.utils.book_append_sheet(wb,ws,"SavedWords")
   XLSX.writeFile(wb,"saved_words.xlsx")
 }
-
+*/
 
 
 //画面下部のcontainer
